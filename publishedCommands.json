@@ -1,0 +1,6 @@
+{
+  "guildCommands": [
+    "ping"
+  ],
+  "applicationCommands": []
+}
