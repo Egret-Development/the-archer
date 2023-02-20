@@ -9,7 +9,7 @@
   },
   "name": "the-archer",
   "description": "The Archer is multipurpose discord bot that do fun things",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "bot.js",
   "scripts": {
     "test": "npm start",
