@@ -66,7 +66,7 @@ async function exchangeCode(code) {
 	catch (e) {
 		console.error(e);
 	}
-	return token.data;
+	return token;
 
 }
 
