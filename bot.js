@@ -16,6 +16,7 @@ const Command = require('./classes/commands.js');
 // * Library setups
 // Discord.js
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+exports.client = client;
 
 // Define commands
 client.applicationCommands = [];
