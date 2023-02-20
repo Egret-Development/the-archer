@@ -22,7 +22,7 @@ class Command {
   * @param { Object } options The options of the command
 	* @param { Array } options.inputOptions The input options of the command
 	* @param { String } options.inputOptions.type The type of the input options
-	* @param { Function } options.inputOptions.callback The callback function of the command
+	* @param { Function } options.inputOptions.callback The callback function of the command, remember toreturn the value of options!
   */
 	constructor(client, name, description, category, production, publish, execute, options = {}) {
 		// * Checking if the parameters are of the correct type

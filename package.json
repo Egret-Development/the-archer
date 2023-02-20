@@ -1,6 +1,8 @@
 {
   "dependencies": {
-    "discord.js": "^14.7.1"
+    "discord.js": "^14.7.1",
+    "ejs": "^3.1.8",
+    "express": "^4.18.2"
   },
   "name": "the-archer",
   "description": "The Archer is multipurpose discord bot that do fun things",
@@ -11,7 +13,7 @@
   },
   "scripts": {
     "test": "npm start",
-    "start": "node bot.js"
+    "start": "node dashboard.js"
   },
   "repository": {
     "type": "git",
