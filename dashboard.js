@@ -88,8 +88,6 @@ app.get('/redirect', async function(req, res) {
 
 async function login(res, token) {
 	const identity = await getIdentity(res, token.access_token);
-  console.log(identity)
-	if(!identity) return res.redirect('/login');
 	let options = {
 		maxAge: (1000 * token.expires_in) - 10000,
 		httpOnly: true,
