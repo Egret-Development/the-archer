@@ -281,8 +281,8 @@ https
 		// Provide the private and public key to the server by reading each
 		// file's content with the readFileSync() method.
     {
-      key: fs.readFileSync("public.pem"),
-      cert: fs.readFileSync("private.pem"),
+      key: fs.readFileSync(__dirname + "/public.pem"),
+      cert: fs.readFileSync(__dirname + "/private.pem"),
     },
     app
   )
