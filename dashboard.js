@@ -78,6 +78,7 @@ app.get('/login', function(req, res) {
 app.get('/redirect', async function(req, res) {
   try {
     const code = req.query.code;
+    console.log(code)
     const token = await exchangeCode(code);
     if (token.error) return res.redirect('/login');
     // login(res, token);
