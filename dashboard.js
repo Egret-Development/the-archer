@@ -118,8 +118,8 @@ app.get('/dashboard', async function(req, res) {
 		return login(res, newToken);
 	};
 	let username = JSON.parse(req.cookies['userdata']);
-  let guilds = req.cookies['guilds'] == undefined ? await getGuilds(res, tokenData['access_token']) : JSON.parse(req.cookies['guilds']);
-	if(!guilds) return;
+  // let guilds = req.cookies['guilds'] == undefined ? await getGuilds(res, tokenData['access_token']) : JSON.parse(req.cookies['guilds']);
+	// if(!guilds) return;
   let client = bot.client;
 	let botGuilds = client.guilds.cache.map(guild => guild.id);
 	let guildsData = '';
