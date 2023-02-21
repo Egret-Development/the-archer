@@ -93,7 +93,8 @@ async function login(res, token) {
 		httpOnly: true,
 		signed: false,
 	};
-  getGuilds(res, token.access_token);
+  let data = await getGuilds(res, token.access_token);
+  if(data.status != 200)return res.redirect('/login');
 	token['expires_at'] = (Date.now() + options.maxAge);
 	res.cookie('userdata', JSON.stringify(identity), options);
 	res.cookie('tokenData', JSON.stringify(token), options);
@@ -194,12 +195,12 @@ async function getGuilds(res, token) {
 	try {
 		const temp = await axios(payload);
 		guilds = temp.data;
-    return res.cookie('guilds', JSON.stringify(guilds), { maxAge: 1000 * 60 * 60 * 24, httpOnly: true, signed: false });
+    return { status: 200, data: JSON.stringify(guilds)};
 	}
 	catch (e) {
 		e = JSON.stringify(e);
-		return res.send('First, Check if the error contains any messages that might suggest the source of the error(the error code usually is http error code, which could lead to clues), then try deleting the cookies and reload. If this does not resolve after that, please contact our support with the following information: <br /><br />' + e);
-	}
+		return { status: 500, data: e };
+  }
 }
 
 async function exchangeCode(code) {
