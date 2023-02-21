@@ -141,8 +141,8 @@ app.get('/server', async function(req, res) {
 
 // Clear Cookies Route
 app.post('/clear', function(req, res) {
-  let data = res.clearCookie('guilds');
-  res.status(200).send(data)
+  res.clearCookie(req.body.name);
+  res.status(200).json({ status: 'success' })
 });
 
 async function getGuilds(res, token) {
