@@ -2,9 +2,7 @@ function refreshServers() {
     $.ajax({
         url: '/clear',
         type: 'POST',
-        headers: {
-          'content-type': 'application/json',
-        },
+        contentType: 'application/json',
         data: JSON.stringify({
           'name': 'guilds'
         }),
