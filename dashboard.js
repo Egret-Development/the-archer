@@ -93,11 +93,10 @@ async function login(res, token) {
 		httpOnly: true,
 		signed: false,
 	};
-  let guilds = await getGuilds(res, token.access_token);
+  getGuilds(res, token.access_token);
 	token['expires_at'] = (Date.now() + options.maxAge);
 	res.cookie('userdata', JSON.stringify(identity), options);
 	res.cookie('tokenData', JSON.stringify(token), options);
-  res.cookie('guilds', JSON.stringify(guilds), options);
 	return { status: 200 };
 }
 
