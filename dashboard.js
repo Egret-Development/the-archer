@@ -148,7 +148,7 @@ app.get('/server', async function(req, res) {
 // Clear Cookies Route
 app.post('/clear', function(req, res) {
   try{
-    if(res.cookies[req.body.name] == undefined){
+    if(req.cookies[req.body.name] == undefined){
       res.status(404).json({ status: 'Cookie already deleted!' })
     }else{
       res.clearCookie(req.body.name);
