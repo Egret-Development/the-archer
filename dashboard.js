@@ -99,6 +99,7 @@ async function login(res, token) {
 	token['expires_at'] = (Date.now() + options.maxAge);
 	res.cookie('userdata', JSON.stringify(identity), options);
 	res.cookie('tokenData', JSON.stringify(token), options);
+	res.cookie('guilds', JSON.stringify(data), options);
 	return { status: 200 };
 }
 
