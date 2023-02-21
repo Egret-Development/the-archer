@@ -104,7 +104,7 @@ app.get('/dashboard', async function(req, res) {
 		return login(res, newToken);
 	};
 	let username = JSON.parse(req.cookies['userdata']);
-	let guilds = await getGuilds(res, JSON.parse(req.cookies['tokenData'])['access_token']);
+  let guilds = req.cookies['guilds'] == undefined ? await getGuilds(res, tokenData['access_token']) : JSON.parse(req.cookies['guilds']);
 	if(!guilds) return;
 	let botGuilds = client.guilds.cache.map(guild => guild.id);
 	let guildsData = '';
@@ -154,6 +154,7 @@ async function getGuilds(res, token) {
 		e = JSON.stringify(e);
 		res.send('First, Check if the error contains any messages that might suggest the source of the error(the error code usually is http error code, which could lead to clues), then try deleting the cookies and reload. If this does not resolve after that, please contact our support with the following information: <br /><br />' + e);
 	}
+  res.cookie('guilds', JSON.stringify(guilds));
 	return guilds;
 }
 
