@@ -51,7 +51,7 @@ class Command {
 		client.on('interactionCreate', async (interaction) => {
 			if (!interaction.isCommand()) return;
 			if (interaction.commandName !== this.name) return;
-			await this.execute(interaction);
+			await this.execute(interaction, client);
 		});
 	}
 

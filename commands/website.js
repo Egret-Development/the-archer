@@ -1,13 +1,18 @@
 // * Description: The website command
+const { EmbedBuilder } = require("discord.js");
 
 module.exports = {
 	name: 'website',
 	description: 'Returns the website for the bot! This is where the dashboard is located!',
 	category: 'information',
-	production: false,
+	production: true,
 	publish: true,
 	async execute(interaction) {
-		await interaction.reply('Access the dashboard with this link: https://archer.egretdevelopment.com');
+    let websiteEmbed = new EmbedBuilder()
+      .setTitle("The Archer Official Website")
+      .setColor("#87CEEB")
+      .setDescription("To access the dashboard, or to learn more about the bot, visit the website [here](https://archer.egretdevelopment.com)")
+		await interaction.reply({ embeds: [websiteEmbed] });
 	},
 	options: {},
 };

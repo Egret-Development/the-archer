@@ -35,8 +35,8 @@ class Bot{
           }
         }
       });
-      // require('./utils/helperFunctions.js')['updateGuildCommand'](client.guildCommands);
-      // require('./utils/helperFunctions.js')['updateCommand'](client.applicationCommands);
+      // require('./utils/helperFunctions.js')['updateGuildCommand'](this.client.guildCommands);
+      // require('./utils/helperFunctions.js')['updateCommand'](this.client.applicationCommands);
     });
 
     // * Event Listeners
@@ -44,6 +44,12 @@ class Bot{
     this.client.on(Events.ClientReady, () => {
       // logs to console that bot is ready for use
       console.log(`Logged in as ${this.client.user.tag}!`);
+      let command = this.client.applicationCommands;
+      this.client.user.setPresence({ activities: [{ name: "/" + command[Math.floor(Math.random() * command.length)]['name'] }] })
+      setInterval(() => {
+      let commands = this.client.applicationCommands;
+      this.client.user.setPresence({ activities: [{ name: "/" + commands[Math.floor(Math.random() * commands.length)]['name'] }] })
+      }, 30000);
     });
   }
 

@@ -3,5 +3,7 @@
     "ping",
     "website"
   ],
-  "applicationCommands": []
+  "applicationCommands": [
+    "website"
+  ]
 }

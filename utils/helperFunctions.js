@@ -46,6 +46,10 @@ exports.updateCommand = async function(commands) {
 
 		// The put method is used to fully refresh all commands in the guild with the current set
 		await rest.put(
+			Routes.applicationGuildCommands(clientId, guildId),
+			{ body: [] },
+		);
+		await rest.put(
 			Routes.applicationCommands(clientId),
 			{ body: [] },
 		);
