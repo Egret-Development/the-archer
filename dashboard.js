@@ -95,6 +95,7 @@ async function login(res, token) {
 	};
   let data = await getGuilds(res, token.access_token);
   if(data.status != 200)return res.redirect('/login');
+  data = data.data
 	token['expires_at'] = (Date.now() + options.maxAge);
 	res.cookie('userdata', JSON.stringify(identity), options);
 	res.cookie('tokenData', JSON.stringify(token), options);
