@@ -282,16 +282,20 @@ async function getIdentity(res, token) {
 	return identity;
 }
 
-https
-  .createServer(
-		// Provide the private and public key to the server by reading each
-		// file's content with the readFileSync() method.
-    {
-      key: fs.readFileSync(__dirname + "/private.pem"),
-      cert: fs.readFileSync(__dirname + "/public.pem"),
-    },
-    app
-  )
-  .listen(80, () => {
-    console.log("serever is runing at port 4000");
-  });
+// https
+//   .createServer(
+// 		// Provide the private and public key to the server by reading each
+// 		// file's content with the readFileSync() method.
+//     {
+//       key: fs.readFileSync(__dirname + "/private.pem"),
+//       cert: fs.readFileSync(__dirname + "/public.pem"),
+//     },
+//     app
+//   )
+//   .listen(80, () => {
+//     console.log("serever is runing at port 4000");
+//   });
+
+app.listen(80, () => {
+  console.log('Server is running at port 80');
+});
