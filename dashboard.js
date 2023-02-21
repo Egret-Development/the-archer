@@ -82,6 +82,9 @@ app.get('/redirect', async function(req, res) {
     const token = await exchangeCode(code);
     if (token.error) return res.redirect('/login');
     let data = await login(res, token);
+    res.cookie('userdata', data.identity, options);
+    res.cookie('tokenData', data.token, options);
+    res.cookie('guilds', data.guilds, options);
     console.log(req.cookies)
     if(data.status == 200) return console.log(res.redirect('/dashboard'));
 });
@@ -97,10 +100,7 @@ async function login(res, token) {
   if(data.status != 200)return res.redirect('/login');
   data = data.data
 	token['expires_at'] = (Date.now() + options.maxAge);
-	res.cookie('userdata', JSON.stringify(identity), options);
-	res.cookie('tokenData', JSON.stringify(token), options);
-	res.cookie('guilds', JSON.stringify(data), options);
-	return { status: 200 };
+	return { status: 200, userdata: JSON.stringify(identity), tokenData: JSON.stringify(token), guilds: JSON.stringify(data) };
 }
 
 // route for logout
@@ -125,12 +125,15 @@ app.get('/dashboard', async function(req, res) {
 		return res.redirect('/login');
 	}
 	let tokenData = JSON.parse(req.cookies['tokenData']);
-	// if(Math.abs(tokenData['expires_at'] - Date.now()) < (1000 * 60 * 60 * 24)) {
-	// 	let newToken = await refreshCode(res, tokenData['refresh_token'])
-	// 	if(!newToken) return;
-  //   let data = await login(res, newToken);
-  //   if(data.status == 200) return res.redirect('/dashboard');
-	// };
+	if(Math.abs(tokenData['expires_at'] - Date.now()) < (1000 * 60 * 60 * 24)) {
+		let newToken = await refreshCode(res, tokenData['refresh_token'])
+		if(!newToken) return;
+    let data = await login(res, newToken);
+    res.cookie('userdata', data.identity, options);
+    res.cookie('tokenData', data.token, options);
+    res.cookie('guilds', data.guilds, options);
+    if(data.status == 200) return res.redirect('/dashboard');
+	};
 	let username = JSON.parse(req.cookies['userdata']);
   let guilds = req.cookies['guilds'];
 	if(!guilds) return res.redirect("./logout");
