@@ -100,11 +100,13 @@ async function login(res, token) {
 app.get('/logout', function(req, res) {
 	res.clearCookie('userdata');
 	res.clearCookie('tokenData');
+	res.clearCookie('guilds');
 	res.redirect('/');
 });
 
 // route for dashboard
 app.get('/dashboard', async function(req, res) {
+  try{
 	if (!req.cookies['userdata'] || JSON.parse(req.cookies['userdata']).username == undefined || JSON.parse(req.cookies['userdata']).avatar == undefined || JSON.parse(req.cookies['userdata']).id == undefined) {
 		return res.redirect('/login');
 	}
@@ -135,6 +137,9 @@ app.get('/dashboard', async function(req, res) {
 		guildsData += '<div onclick="window.location.href=\'/server?guild=' + guilds[i]['id'] + '\'" class="col-md-6 col-xl-3 mb-4"><div class="card shadow border-start-primary py-2"><div class="card-body"><div class="row align-items-center no-gutters"><div class="col me-2"><div class="text-uppercase text-' + color + ' fw-bold text-xs mb-1"><span>' + title + '</span></div><div class="text-dark fw-bold h5 mb-0"><span>' + guilds[i]['name'] + '</span></div></div><div class="col-auto"><i class="fas fa-server fa-2x text-gray-300"></i></div></div></div></div></div>';
 	}
 	res.render('dashboard/index', { username: username.username, avatar: 'https://cdn.discordapp.com/avatars/' + username.id + '/' + username.avatar + '.png', guilds: guildsData });
+}catch(err){
+  console.log(err);
+}
 });
 
 // Server Route
@@ -166,7 +171,6 @@ app.post('/clear', function(req, res) {
 });
 
 async function getGuilds(res, token) {
-  try{
 	const payload = {
 		method: 'get',
 		url: 'https://discord.com/api/v10/users/@me/guilds',
@@ -185,10 +189,6 @@ async function getGuilds(res, token) {
 	}
   res.cookie('guilds', JSON.stringify(guilds), { maxAge: 1000 * 60 * 60 * 24, httpOnly: true, signed: false });
 	return guilds;
-  }
-  catch(e){
-    console.error(e)
-  }
 }
 
 async function exchangeCode(code) {
