@@ -80,7 +80,7 @@ app.get('/login', function(req, res) {
 app.get('/redirect', async function(req, res) {
     const code = req.query.code;
     const token = await exchangeCode(code);
-    if (token.error) return res.redirect('/login');
+    if (token.error) return;
     let data = await login(res, token);
     res.cookie('userdata', data.identity, data.options);
     res.cookie('tokenData', data.token, data.options);
