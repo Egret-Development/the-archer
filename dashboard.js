@@ -50,7 +50,7 @@ app.get('/support', function(req, res) {
 app.get('/invite', function(req, res) {
 	let extra = '';
 	if(req.query.server) extra += '&guild_id=' + req.query.server;
-	res.status(308).redirect('https://discord.com/api/oauth2/authorize?client_id=1076722106684952616&permissions=1642691165303&redirect_uri=https%3A%2F%2Farcher.egretdevelopment.com%2Fredirect&response_type=code&scope=bot%20identify%20applications.commands%20guilds' + extra);
+	res.status(308).redirect('https://discord.com/api/oauth2/authorize?client_id=1076722106684952616&permissions=' + config.normalPermissions + '&redirect_uri=https%3A%2F%2Farcher.egretdevelopment.com%2Fredirect&response_type=code&scope=bot%20identify%20applications.commands%20guilds' + extra);
 });
 
 // route for login page
@@ -152,6 +152,7 @@ async function getGuilds(res, token) {
 	}
 	catch (e) {
 		e = JSON.stringify(e);
+    alert(e);
 		res.send('First, try deleting the cookies and reload. If this does not resolve after that, please contact our support with the following information: <br /><br />' + e);
 	}
 	return guilds;
@@ -208,6 +209,7 @@ async function refreshCode(res, code) {
 	}
 	catch (e) {
 		e = JSON.stringify(e);
+    alert(e);
 		res.send('First, try deleting the cookies and reload. If this does not resolve after that, please contact our support with the following information: <br /><br />' + e)
 	}
 	return token;
@@ -229,6 +231,7 @@ async function getIdentity(res, token) {
 	}
 	catch (e) {
 		e = JSON.stringify(e);
+    alert(e);
 		res.send('First, try deleting the cookies and reload. If this does not resolve after that, please contact our support with the following information: <br /><br />' + e)
 	}
 	return identity;
