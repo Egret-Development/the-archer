@@ -8,8 +8,11 @@ const qs = require('qs');
 const config = require('./env.json');
 const cookieParser = require('cookie-parser');
 const { PermissionsBitField } = require('discord.js');
-let { client } = require('./bot.js');
+let Bot = require('./bot.js');
 const rateLimit = require('express-rate-limit')
+
+let bot = new Bot();
+bot.login();
 
 // setting view engine to ejs
 app.set('view engine', 'ejs');
@@ -114,6 +117,7 @@ app.get('/dashboard', async function(req, res) {
 	let username = JSON.parse(req.cookies['userdata']);
   let guilds = req.cookies['guilds'] == undefined ? await getGuilds(res, tokenData['access_token']) : JSON.parse(req.cookies['guilds']);
 	if(!guilds) return;
+  let client = bot.client;
 	let botGuilds = client.guilds.cache.map(guild => guild.id);
 	let guildsData = '';
 	for (let i in guilds) {

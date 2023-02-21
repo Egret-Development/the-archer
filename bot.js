@@ -13,38 +13,46 @@ const config = require('./env.json');
 // * Classes Declarations
 const Command = require('./classes/commands.js');
 
-// * Library setups
-// Discord.js
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-exports.client = client;
+class Bot{
+  constructor(){
+    // * Library setups
+    // Discord.js
+    this.client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-// Define commands
-client.applicationCommands = [];
-client.guildCommands = [];
-fs.readdir(path.join(__dirname, './commands'), (err, files) => {
-	if (err) return console.error(err);
-	files.forEach(file => {
-		file = require('./commands/' + file);
-		if (file.publish == true) {
-			if (file.production == true) {
-				client.applicationCommands.push(new Command(client, file.name, file.description, file.category, file.production, file.publish, file.execute, file.options).build()['slashCommandOptions']);
-			}
-			else if (file.production == false) {
-				client.guildCommands.push(new Command(client, file.name, file.description, file.category, file.production, file.publish, file.execute, file.options).build()['slashCommandOptions']);
-			}
-		}
-	});
-	// require('./utils/helperFunctions.js')['updateGuildCommand'](client.guildCommands);
-	// require('./utils/helperFunctions.js')['updateCommand'](client.applicationCommands);
+    // Define commands
+    this.client.applicationCommands = [];
+    this.client.guildCommands = [];
+    fs.readdir(path.join(__dirname, './commands'), (err, files) => {
+      if (err) return console.error(err);
+      files.forEach(file => {
+        file = require('./commands/' + file);
+        if (file.publish == true) {
+          if (file.production == true) {
+            this.client.applicationCommands.push(new Command(this.client, file.name, file.description, file.category, file.production, file.publish, file.execute, file.options).build()['slashCommandOptions']);
+          }
+          else if (file.production == false) {
+            this.client.guildCommands.push(new Command(this.client, file.name, file.description, file.category, file.production, file.publish, file.execute, file.options).build()['slashCommandOptions']);
+          }
+        }
+      });
+      // require('./utils/helperFunctions.js')['updateGuildCommand'](client.guildCommands);
+      // require('./utils/helperFunctions.js')['updateCommand'](client.applicationCommands);
+    });
 
-});
+    // * Event Listeners
+    // Returns when bot is ready
+    this.client.on(Events.ClientReady, () => {
+      // logs to console that bot is ready for use
+      console.log(`Logged in as ${this.client.user.tag}!`);
+    });
+  }
 
-// * Event Listeners
-// Returns when bot is ready
-client.on(Events.ClientReady, () => {
-	// logs to console that bot is ready for use
-	console.log(`Logged in as ${client.user.tag}!`);
-});
 
-// * Bot Login
-client.login(config['DISCORD_TOKEN']);
+  // * Functions
+  login(){
+    this.client.login(config['DISCORD_TOKEN']);
+  }
+}
+
+
+module.exports = Bot;
