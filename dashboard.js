@@ -272,6 +272,6 @@ async function getIdentity(res, token) {
 	return identity;
 }
 
-app.listen(80, function() {
+app.listen(443, function() {
 	console.log('Server is running on port 80 ');
 });
