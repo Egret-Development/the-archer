@@ -1,6 +1,6 @@
 function refreshServers() {
     $.ajax({
-        url: '/remove',
+        url: '/clear',
         type: 'POST',
         headers: {
           'content-type': 'application/json',
