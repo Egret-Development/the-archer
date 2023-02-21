@@ -275,6 +275,16 @@ async function getIdentity(res, token) {
 	return identity;
 }
 
-app.listen(80, function() {
-	console.log('Server is running on port 80 ');
-});
+https
+  .createServer(
+		// Provide the private and public key to the server by reading each
+		// file's content with the readFileSync() method.
+    {
+      key: fs.readFileSync("public.pem"),
+      cert: fs.readFileSync("private.pem"),
+    },
+    app
+  )
+  .listen(4000, () => {
+    console.log("serever is runing at port 4000");
+  });
