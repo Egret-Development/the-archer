@@ -80,7 +80,8 @@ app.get('/redirect', async function(req, res) {
     const code = req.query.code;
     const token = await exchangeCode(code);
     if (token.error) return res.redirect('/login');
-    login(res, token);
+    let data = await login(res, token);
+    if(data.status == 200) return res.redirect('/dashboard');
 });
 
 async function login(res, token) {
@@ -97,7 +98,7 @@ async function login(res, token) {
 	res.cookie('userdata', JSON.stringify(identity), options);
 	res.cookie('tokenData', JSON.stringify(token), options);
   res.cookie('guilds', JSON.stringify(guilds), options);
-	res.redirect('/dashboard');
+	return { status: 200 };
 }
 
 // route for logout
@@ -118,7 +119,8 @@ app.get('/dashboard', async function(req, res) {
 	if(Math.abs(tokenData['expires_at'] - Date.now()) < (1000 * 60 * 60 * 24)) {
 		let newToken = await refreshCode(res, tokenData['refresh_token'])
 		if(!newToken) return;
-		return login(res, newToken);
+    let data = await login(res, newToken);
+    if(data.status == 200) return res.redirect('/dashboard');
 	};
 	let username = JSON.parse(req.cookies['userdata']);
   let guilds = req.cookies['guilds'];
