@@ -82,7 +82,7 @@ app.get('/redirect', async function(req, res) {
     if (token.error) return res.redirect('/login');
     let data = await login(res, token);
     console.log(data)
-    if(data.status == 200) return res.redirect('/dashboard');
+    if(data.status == 200) return res.send('/test');
 });
 
 async function login(res, token) {
