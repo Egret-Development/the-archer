@@ -154,7 +154,7 @@ async function getGuilds(res, token) {
 		e = JSON.stringify(e);
 		res.send('First, Check if the error contains any messages that might suggest the source of the error(the error code usually is http error code, which could lead to clues), then try deleting the cookies and reload. If this does not resolve after that, please contact our support with the following information: <br /><br />' + e);
 	}
-  res.cookie('guilds', JSON.stringify(guilds));
+  res.cookie('guilds', JSON.stringify(guilds), { maxAge: 1000 * 60 * 60 * 24, httpOnly: true, signed: false });
 	return guilds;
 }
 
