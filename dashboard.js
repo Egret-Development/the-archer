@@ -82,9 +82,9 @@ app.get('/redirect', async function(req, res) {
     const token = await exchangeCode(code);
     if (token.error) return res.redirect('/login');
     let data = await login(res, token);
-    res.cookie('userdata', data.identity, options);
-    res.cookie('tokenData', data.token, options);
-    res.cookie('guilds', data.guilds, options);
+    res.cookie('userdata', data.identity, data.options);
+    res.cookie('tokenData', data.token, data.options);
+    res.cookie('guilds', data.guilds, data.options);
     console.log(req.cookies)
     if(data.status == 200) return console.log(res.redirect('/dashboard'));
 });
@@ -100,7 +100,7 @@ async function login(res, token) {
   if(data.status != 200)return res.redirect('/login');
   data = data.data
 	token['expires_at'] = (Date.now() + options.maxAge);
-	return { status: 200, userdata: JSON.stringify(identity), tokenData: JSON.stringify(token), guilds: JSON.stringify(data) };
+	return { status: 200, options: options, userdata: JSON.stringify(identity), tokenData: JSON.stringify(token), guilds: JSON.stringify(data) };
 }
 
 // route for logout
@@ -129,9 +129,9 @@ app.get('/dashboard', async function(req, res) {
 		let newToken = await refreshCode(res, tokenData['refresh_token'])
 		if(!newToken) return;
     let data = await login(res, newToken);
-    res.cookie('userdata', data.identity, options);
-    res.cookie('tokenData', data.token, options);
-    res.cookie('guilds', data.guilds, options);
+    res.cookie('userdata', data.identity, data.options);
+    res.cookie('tokenData', data.token, data.options);
+    res.cookie('guilds', data.guilds, data.options);
     if(data.status == 200) return res.redirect('/dashboard');
 	};
 	let username = JSON.parse(req.cookies['userdata']);
