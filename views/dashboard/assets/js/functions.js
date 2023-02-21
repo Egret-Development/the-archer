@@ -7,7 +7,11 @@ function refreshServers() {
           'name': 'guilds'
         }),
         success: function (data) {
-          // window.location.reload();
+          window.location.reload();
+        },
+        error: function (data) {
+          console.log(data);
+          alert(data);
         }
     });
 }
