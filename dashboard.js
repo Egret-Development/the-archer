@@ -80,10 +80,10 @@ app.get('/redirect', async function(req, res) {
     const code = req.query.code;
     const token = await exchangeCode(code);
     if (token.error) return res.redirect('/login');
-    login(res, token);
+    // login(res, token);
   } catch(e) {
     console.log(e);
-    res.redirect('/login');
+    // res.redirect('/login');
   }
 });
 
