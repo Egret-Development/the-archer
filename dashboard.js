@@ -148,11 +148,15 @@ app.get('/server', async function(req, res) {
 // Clear Cookies Route
 app.post('/clear', function(req, res) {
   try{
-    res.clearCookie(req.body.name);
-    res.status(200).json({ status: 'success' })
+    if(!res.cookie.guilds){
+      res.status(400).json({ status: 'Cookie already deleted!' })
+    }else{
+      res.clearCookie(req.body.name);
+      res.status(200).json({ status: 'success' })
+    }
   }
   catch(e){
-    res.status(500).json({ status: 'error' })
+    res.status(500).json(e)
   }
 });
 
