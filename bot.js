@@ -5,6 +5,7 @@ const { Client, Events, GatewayIntentBits } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 
+
 // * Local File Dependencies Declarations
 const config = require('./env.json');
 

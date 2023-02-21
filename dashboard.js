@@ -6,6 +6,7 @@ const express = require('express'),
 	app = express();
 const axios = require('axios');
 const qs = require('qs');
+const fs = require('fs');
 const config = require('./env.json');
 const cookieParser = require('cookie-parser');
 const { PermissionsBitField } = require('discord.js');
