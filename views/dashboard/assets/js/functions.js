@@ -1,8 +1,15 @@
 function refreshServers() {
-  eraseCookie("guilds");
-  // window.location.reload();
-}
-
-function eraseCookie(name) {   
-  document.cookie = name+'=; Max-Age=-99999999;';  
+    $.ajax({
+        url: '/remove',
+        type: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        data: JSON.stringify({
+          'name': 'guilds'
+        }),
+        success: function (data) {
+          // window.location.reload();
+        }
+    });
 }

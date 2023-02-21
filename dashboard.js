@@ -9,7 +9,7 @@ const config = require('./env.json');
 const cookieParser = require('cookie-parser');
 const { PermissionsBitField } = require('discord.js');
 let { client } = require('./bot.js');
-
+var bodyParser = require('body-parser')
 
 // setting view engine to ejs
 app.set('view engine', 'ejs');
@@ -18,6 +18,8 @@ app.use(cookieParser(config['cookieSecret']));
 app.use(logErrors)
 app.use(clientErrorHandler)
 app.use(errorHandler)
+
+app.use(express.json());
 
 function logErrors (err, req, res, next) {
   console.error(err.stack)
@@ -136,6 +138,12 @@ app.get('/server', async function(req, res) {
 	if(!botGuilds.includes(guild)) return res.redirect('/invite?server=' + guild);
 
 })
+
+// Clear Cookies Route
+app.post('/clear', function(req, res) {
+  let data = res.clearCookie('guilds');
+  res.status(200).send(data)
+});
 
 async function getGuilds(res, token) {
 	const payload = {
