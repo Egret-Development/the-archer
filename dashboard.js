@@ -116,12 +116,12 @@ app.get('/dashboard', async function(req, res) {
 		return res.redirect('/login');
 	}
 	let tokenData = JSON.parse(req.cookies['tokenData']);
-	if(Math.abs(tokenData['expires_at'] - Date.now()) < (1000 * 60 * 60 * 24)) {
-		let newToken = await refreshCode(res, tokenData['refresh_token'])
-		if(!newToken) return;
-    let data = await login(res, newToken);
-    if(data.status == 200) return res.redirect('/dashboard');
-	};
+	// if(Math.abs(tokenData['expires_at'] - Date.now()) < (1000 * 60 * 60 * 24)) {
+	// 	let newToken = await refreshCode(res, tokenData['refresh_token'])
+	// 	if(!newToken) return;
+  //   let data = await login(res, newToken);
+  //   if(data.status == 200) return res.redirect('/dashboard');
+	// };
 	let username = JSON.parse(req.cookies['userdata']);
   let guilds = req.cookies['guilds'];
 	if(!guilds) return res.redirect("./logout");
