@@ -9,7 +9,7 @@ const config = require('./env.json');
 const cookieParser = require('cookie-parser');
 const { PermissionsBitField } = require('discord.js');
 let { client } = require('./bot.js');
-var bodyParser = require('body-parser')
+const rateLimit = require('express-rate-limit')
 
 // setting view engine to ejs
 app.set('view engine', 'ejs');
@@ -20,6 +20,12 @@ app.use(clientErrorHandler)
 app.use(errorHandler)
 
 app.use(express.json());
+app.use('/clear', rateLimit({
+	windowMs: 1000, // 15 minutes
+	max: 5, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+}))
 
 function logErrors (err, req, res, next) {
   console.error(err.stack)
@@ -141,8 +147,13 @@ app.get('/server', async function(req, res) {
 
 // Clear Cookies Route
 app.post('/clear', function(req, res) {
-  res.clearCookie(req.body.name);
-  res.status(200).json({ status: 'success' })
+  try{
+    res.clearCookie(req.body.name);
+    res.status(200).json({ status: 'success' })
+  }
+  catch(e){
+    res.status(500).json({ status: 'error' })
+  }
 });
 
 async function getGuilds(res, token) {
