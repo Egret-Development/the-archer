@@ -166,6 +166,7 @@ app.post('/clear', function(req, res) {
 });
 
 async function getGuilds(res, token) {
+  try{
 	const payload = {
 		method: 'get',
 		url: 'https://discord.com/api/v10/users/@me/guilds',
@@ -184,6 +185,10 @@ async function getGuilds(res, token) {
 	}
   res.cookie('guilds', JSON.stringify(guilds), { maxAge: 1000 * 60 * 60 * 24, httpOnly: true, signed: false });
 	return guilds;
+  }
+  catch(e){
+    console.error(e)
+  }
 }
 
 async function exchangeCode(code) {
