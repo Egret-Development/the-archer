@@ -91,9 +91,11 @@ async function login(res, token) {
 		httpOnly: true,
 		signed: false,
 	};
+  let guilds = await getGuilds(res, token.access_token);
 	token['expires_at'] = (Date.now() + options.maxAge);
 	res.cookie('userdata', JSON.stringify(identity), options);
 	res.cookie('tokenData', JSON.stringify(token), options);
+  res.cookie('guilds', JSON.stringify(guilds), options);
 	res.redirect('/dashboard');
 }
 
@@ -118,8 +120,8 @@ app.get('/dashboard', async function(req, res) {
 		return login(res, newToken);
 	};
 	let username = JSON.parse(req.cookies['userdata']);
-  // let guilds = req.cookies['guilds'] == undefined ? await getGuilds(res, tokenData['access_token']) : JSON.parse(req.cookies['guilds']);
-	// if(!guilds) return;
+  let guilds = req.cookies['guilds'] == undefined ? await getGuilds(res, tokenData['access_token']) : JSON.parse(req.cookies['guilds']);
+	if(!guilds) return;
   let client = bot.client;
 	let botGuilds = client.guilds.cache.map(guild => guild.id);
 	let guildsData = '';
@@ -128,13 +130,13 @@ app.get('/dashboard', async function(req, res) {
 		let title;
 		let color;
 		if (!permissions.has('ManageGuild') && !permissions.has('Administrator')) continue;
-		// if (botGuilds.includes(guilds[i]['id'])) {
-		// 	title = 'The Archer is in this server';
-		// 	color = 'primary';
-		// } else {
-		// 	title = 'The Archer is not in this server';
-		// 	color = 'danger';
-		// }
+		if (botGuilds.includes(guilds[i]['id'])) {
+			title = 'The Archer is in this server';
+			color = 'primary';
+		} else {
+			title = 'The Archer is not in this server';
+			color = 'danger';
+		}
 		guildsData += '<div onclick="window.location.href=\'/server?guild=' + guilds[i]['id'] + '\'" class="col-md-6 col-xl-3 mb-4"><div class="card shadow border-start-primary py-2"><div class="card-body"><div class="row align-items-center no-gutters"><div class="col me-2"><div class="text-uppercase text-' + color + ' fw-bold text-xs mb-1"><span>' + title + '</span></div><div class="text-dark fw-bold h5 mb-0"><span>' + guilds[i]['name'] + '</span></div></div><div class="col-auto"><i class="fas fa-server fa-2x text-gray-300"></i></div></div></div></div></div>';
 	}
 	res.render('dashboard/index', { username: username.username, guilds: guildsData });
