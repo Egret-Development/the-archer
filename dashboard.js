@@ -81,9 +81,9 @@ app.get('/redirect', async function(req, res) {
     const code = req.query.code;
     const token = await exchangeCode(code);
     if (token.error) return res.redirect('/login');
-    let data = await login(res, token);
+    login(res, token);
     console.log(req.cookies)
-    // if(data.status == 200) return res.redirect('/dashboard');
+    if(data.status == 200) return res.redirect('/dashboard');
 });
 
 async function login(res, token) {
