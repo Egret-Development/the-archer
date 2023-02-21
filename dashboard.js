@@ -76,16 +76,11 @@ app.get('/login', function(req, res) {
 
 // route for redirect
 app.get('/redirect', async function(req, res) {
-  try {
     const code = req.query.code;
     const token = await exchangeCode(code);
     console.log(token)
     if (token.error) return res.redirect('/login');
-    // login(res, token);
-  } catch(e) {
-    console.log(e);
-    // res.redirect('/login');
-  }
+    login(res, token);
 });
 
 async function login(res, token) {
