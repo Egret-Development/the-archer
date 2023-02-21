@@ -1,6 +1,7 @@
 // * Description: This file is used for initializing the dashboard
 
 // * Import Modules
+const https = require("https");
 const express = require('express'),
 	app = express();
 const axios = require('axios');
@@ -55,13 +56,13 @@ app.get('/', function(req, res) {
 
 // route for support page
 app.get('/support', function(req, res) {
-	res.status(308).redirect('https://discord.gg/2nDJmR98nY');
+	res.redirect('https://discord.gg/2nDJmR98nY');
 });
 // route for redirect
 app.get('/invite', function(req, res) {
 	let extra = '';
 	if(req.query.server) extra += '&guild_id=' + req.query.server;
-	res.status(308).redirect('https://discord.com/api/oauth2/authorize?client_id=1076722106684952616&permissions=' + config.normalPermissions + '&redirect_uri=https%3A%2F%2Farcher.egretdevelopment.com%2Fredirect&response_type=code&scope=bot%20identify%20applications.commands%20guilds' + extra);
+	res.redirect('https://discord.com/api/oauth2/authorize?client_id=1076722106684952616&permissions=' + config.normalPermissions + '&redirect_uri=https%3A%2F%2Farcher.egretdevelopment.com%2Fredirect&response_type=code&scope=bot%20identify%20applications.commands%20guilds' + extra);
 });
 
 // route for login page
@@ -271,6 +272,16 @@ async function getIdentity(res, token) {
 	return identity;
 }
 
-app.listen(80, function() {
-	console.log('Server is running on port 80 ');
-});
+https
+  .createServer(
+		// Provide the private and public key to the server by reading each
+		// file's content with the readFileSync() method.
+    {
+      key: fs.readFileSync("key.pem"),
+      cert: fs.readFileSync("cert.pem"),
+    },
+    app
+  )
+  .listen(443, () => {
+    console.log("serever is runing at port 443");
+  });
