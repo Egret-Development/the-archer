@@ -272,16 +272,6 @@ async function getIdentity(res, token) {
 	return identity;
 }
 
-https
-  .createServer(
-		// Provide the private and public key to the server by reading each
-		// file's content with the readFileSync() method.
-    {
-      key: fs.readFileSync("key.pem"),
-      cert: fs.readFileSync("cert.pem"),
-    },
-    app
-  )
-  .listen(443, () => {
-    console.log("serever is runing at port 443");
-  });
+app.listen(80, function() {
+	console.log('Server is running on port 80 ');
+});
