@@ -10,8 +10,8 @@ function refreshServers() {
           window.location.reload();
         },
         error: function (data) {
-          console.log(data);
-          alert(data);
+          console.log(data.responseJSON);
+          alert(data.responseJSON.status);
         }
     });
 }
