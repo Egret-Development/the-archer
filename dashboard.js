@@ -78,14 +78,13 @@ app.get('/login', function(req, res) {
 app.get('/redirect', async function(req, res) {
     const code = req.query.code;
     const token = await exchangeCode(code);
-    console.log(token)
     if (token.error) return res.redirect('/login');
     login(res, token);
 });
 
 async function login(res, token) {
 	const identity = await getIdentity(res, token.access_token);
-	if(!identity) return;
+	if(!identity) return res.redirect('/login');
 	let options = {
 		maxAge: (1000 * token.expires_in) - 10000,
 		httpOnly: true,
