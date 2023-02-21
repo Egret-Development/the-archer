@@ -112,7 +112,7 @@ app.get('/dashboard/logout', function(req, res) {
 // route for dashboard
 app.get('/dashboard', async function(req, res) {
   try{
-	if (!req.cookies['userdata']) {
+	if (req.cookies['userdata'] == undefined) {
 		return res.redirect('/login');
 	}
 	let tokenData = JSON.parse(req.cookies['tokenData']);
