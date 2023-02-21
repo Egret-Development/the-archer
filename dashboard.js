@@ -156,6 +156,7 @@ app.post('/clear', function(req, res) {
     }
   }
   catch(e){
+    console.error(e)
     res.status(500).json(JSON.parse(JSON.stringify(e)))
   }
 });
