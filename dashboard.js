@@ -152,7 +152,6 @@ async function getGuilds(res, token) {
 	}
 	catch (e) {
 		e = JSON.stringify(e);
-    alert(e);
 		res.send('First, try deleting the cookies and reload. If this does not resolve after that, please contact our support with the following information: <br /><br />' + e);
 	}
 	return guilds;
@@ -209,8 +208,7 @@ async function refreshCode(res, code) {
 	}
 	catch (e) {
 		e = JSON.stringify(e);
-    alert(e);
-		res.send('First, try deleting the cookies and reload. If this does not resolve after that, please contact our support with the following information: <br /><br />' + e)
+		res.send('First, Check if the error contains any messages that might suggest the source of the error(), then try deleting the cookies and reload. If this does not resolve after that, please contact our support with the following information: <br /><br />' + e)
 	}
 	return token;
 
@@ -231,7 +229,6 @@ async function getIdentity(res, token) {
 	}
 	catch (e) {
 		e = JSON.stringify(e);
-    alert(e);
 		res.send('First, try deleting the cookies and reload. If this does not resolve after that, please contact our support with the following information: <br /><br />' + e)
 	}
 	return identity;
