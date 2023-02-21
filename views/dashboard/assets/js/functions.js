@@ -1,6 +1,6 @@
 function refreshServers() {
   eraseCookie("guilds");
-  window.location.reload();
+  // window.location.reload();
 }
 
 function eraseCookie(name) {   
