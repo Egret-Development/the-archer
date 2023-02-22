@@ -92,6 +92,7 @@ app.get('/redirect', async function(req, res) {
   });
 
 async function login(res, token) {
+  console.log(token)
 	let identity = await getIdentity(res, token.access_token);
   console.log(identity)
   if(identity.status != 200) return { status: 500 };
