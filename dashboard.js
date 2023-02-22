@@ -78,7 +78,6 @@ app.get('/login', function(req, res) {
 app.get('/redirect', async function(req, res) {
     const code = req.query.code;
     let token = await exchangeCode(code);
-    console.log(token)
     if (token.status != 200) return res.redirect('/logout');
     token = JSON.parse(token.data);
     let data = await login(res, token);
@@ -107,16 +106,16 @@ async function login(res, token) {
 
 // route for logout
 app.get('/logout', function(req, res) {
-	// res.clearCookie('userData');
-	// res.clearCookie('tokenData');
-	// res.clearCookie('guilds');
+	res.clearCookie('userData');
+	res.clearCookie('tokenData');
+	res.clearCookie('guilds');
 	res.redirect('/');
 });
 // route for logout
 app.get('/dashboard/logout', function(req, res) {
-	// res.clearCookie('userData');
-	// res.clearCookie('tokenData');
-	// res.clearCookie('guilds');
+	res.clearCookie('userData');
+	res.clearCookie('tokenData');
+	res.clearCookie('guilds');
 	res.redirect('/');
 });
 
@@ -132,10 +131,10 @@ app.get('/dashboard', async function(req, res) {
 		let newToken = await refreshCode(res, tokenData['refresh_token'])
 		if(!newToken) return;
     let data = await login(res, newToken);
-    if(data.status == 200) res.cookie('userData', JSON.stringify(data.identity), data.options).cookie('tokenData', JSON.stringify(data.token), data.options).cookie('guilds', JSON.stringify(data.guilds), data.options).redirect('/dashboard');
-  };
+    if(data.status == 200) res.cookie('userData', JSON.stringify(data.userData), data.options).cookie('tokenData', JSON.stringify(token), data.options).cookie('guilds', JSON.stringify(data.guilds), data.options).redirect('/dashboard');
+};
 	let username = JSON.parse(req.cookies['userData']);
-  let guilds = req.cookies['guilds'];
+  let guilds = JSON.parse(req.cookies['guilds']);
 	if(!guilds) return res.redirect("./logout");
   let client = bot.client;
 	let botGuilds = client.guilds.cache.map(guild => guild.id);
