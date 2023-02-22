@@ -77,7 +77,7 @@ app.get('/login', function(req, res) {
 // route for redirect
 app.get('/redirect', async function(req, res) {
     const code = req.query.code;
-    const token = await exchangeCode(code);
+    let token = await exchangeCode(code);
     if (token.status != 200) return res.redirect('/logout');
     token = token.data;
     let data = await login(res, token);
@@ -85,7 +85,7 @@ app.get('/redirect', async function(req, res) {
 });
 
 async function login(res, token) {
-	const identity = await getIdentity(res, token.access_token);
+	let identity = await getIdentity(res, token.access_token);
   if(identity.status != 200) return { status: 500 };
   identity = identity.data;
 	let options = {
