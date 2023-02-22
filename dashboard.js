@@ -129,7 +129,7 @@ app.get('/dashboard', async function(req, res) {
 		let newToken = await refreshCode(res, tokenData['refresh_token'])
 		if(!newToken) return;
     let data = await login(res, newToken);
-    if(data.status == 200) res.cookie('userdata', JSON.stringify(data.identity), data.options).cookie('tokenData', JSON.stringify(data.token), data.options).cookie('guilds', JSON.stringify(data.guilds), data.options).redirect('/dashboard');
+    if(data.status == 200) res.cookie('userdata', data.identity, data.options).cookie('tokenData', data.token, data.options).cookie('guilds', data.guilds, data.options).redirect('/dashboard');
 };
 	let username = JSON.parse(req.cookies['userdata']);
   let guilds = req.cookies['guilds'];
