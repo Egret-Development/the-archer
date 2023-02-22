@@ -1,6 +1,6 @@
 function refreshServers() {
     $.ajax({
-        url: '/clear',
+        url: '/refreshGuilds',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({

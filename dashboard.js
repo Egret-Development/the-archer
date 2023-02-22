@@ -16,6 +16,10 @@ var cors = require('cors')
 
 let bot = new Bot();
 bot.login();
+let latestNumber = 0;
+
+let guilds = {
+}
 
 // setting view engine to ejs
 app.set('view engine', 'ejs');
@@ -82,7 +86,9 @@ app.get('/redirect', async function(req, res) {
     token = JSON.parse(token.data);
     let data = await login(res, token);
     res.redirect("/dashboard")
-    // if(data.status == 200) res.cookie('userData', data.userData, data.options).cookie('tokenData', JSON.stringify(token), data.options).cookie('guilds', data.guilds, data.options).redirect('/dashboard');
+    latestNumber += 1;
+    guilds[latestNumber] = data.guilds;
+    if(data.status == 200) res.cookie('userData', data.userData, data.options).cookie('tokenData', JSON.stringify(token), data.options).cookie('id', latestNumber, data.options).redirect('/dashboard');
 });
 
 async function login(res, token) {
@@ -122,9 +128,10 @@ app.get('/dashboard/logout', function(req, res) {
 app.get('/dashboard', async function(req, res) {
   console.log(req.cookies)
   try{
-	if (isMalFormed(req.cookies.tokenData) || isMalFormed(req.cookies.userData) || isMalFormed(req.cookies.guilds)) {
+	if (isMalFormed(req.cookies.tokenData) || isMalFormed(req.cookies.userData)) {
 		return res.redirect('/logout');
 	}
+  if(!req.cookies['id']) return res.redirect('/logout');
 	let tokenData = JSON.parse(req.cookies['tokenData']);
 	if(Math.abs(tokenData['expires_at'] - Date.now()) < (1000 * 60 * 60 * 24)) {
 		let newToken = await refreshCode(res, tokenData['refresh_token'])
@@ -133,7 +140,7 @@ app.get('/dashboard', async function(req, res) {
     if(data.status == 200) res.cookie('userData', JSON.stringify(data.userData), data.options).cookie('tokenData', JSON.stringify(token), data.options).cookie('guilds', JSON.stringify(data.guilds), data.options).redirect('/dashboard');
 };
 	let username = JSON.parse(req.cookies['userData']);
-  let guilds = JSON.parse(req.cookies['guilds']);
+  let guilds = JSON.parse(guilds[req.cookies['id']]);
   console.log(guilds[0])
 	if(!guilds) return res.redirect("./logout");
   let client = bot.client;
@@ -191,6 +198,19 @@ app.post('/clear', function(req, res) {
       res.clearCookie(req.body.name);
       res.status(200).json({ status: 'success' })
     }
+  }
+  catch(e){
+    console.error(e)
+    res.status(500).json(JSON.parse(JSON.stringify(e)))
+  }
+});
+
+// Clear Cookies Route
+app.post('/refreshGuilds', async function(req, res) {
+  try{
+    let data = await getGuilds(res, req.cookies.tokenData.access_token)
+    guilds[req.cookies.id] = data.data;
+    res.status(200).json({ status: 'success' })
   }
   catch(e){
     console.error(e)
