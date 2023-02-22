@@ -208,7 +208,7 @@ function isMalFormed(json){
 // Clear Cookies Route
 app.post('/refreshGuilds', async function(req, res) {
   try{
-    console.log(req.cookies)
+    console.log(JSON.parse(req.cookies.tokenData))
     let data = await getGuilds(JSON.parse(req.cookies.tokenData))
     console.log(data)
     guildsList[req.cookies.id] = data.data;
