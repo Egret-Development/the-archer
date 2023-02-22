@@ -141,7 +141,6 @@ app.get('/dashboard', async function(req, res) {
 	let username = JSON.parse(req.cookies['userData']);
   if(guildsList[req.cookies['id']] == undefined) return res.redirect('/logout');
   let guilds = JSON.parse(guildsList[req.cookies['id']]);
-  console.log(guilds[0])
 	if(!guilds) return res.redirect("./logout");
   let client = bot.client;
 	let botGuilds = client.guilds.cache.map(guild => guild.id);
