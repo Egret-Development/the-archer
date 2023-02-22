@@ -79,8 +79,8 @@ app.get('/redirect', async function(req, res) {
     const code = req.query.code;
     const token = await exchangeCode(code);
     if (token.error) return;
-    console.log(req.cookies)
     let data = await login(res, token);
+    console.log(req.cookies)
     if(data.status == 200) res.cookie('userdata', data.identity, data.options).cookie('tokenData', data.token, data.options).cookie('guilds', data.guilds, data.options).redirect('/dashboard');
 });
 
