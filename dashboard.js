@@ -77,11 +77,11 @@ app.get('/login', function(req, res) {
 // route for redirect
 app.get('/redirect', async function(req, res) {
     const code = req.query.code;
-    let token = JSON.parse(await exchangeCode(code));
+    let token = await exchangeCode(code);
     if (token.status != 200) return res.redirect('/logout');
     token = token.data;
     let data = await login(res, token);
-    if(data.status == 200) res.cookie('userData', JSON.stringify(data.identity), data.options).cookie('tokenData', JSON.stringify(data.token), data.options).cookie('guilds', JSON.stringify(data.guilds), data.options).redirect('/dashboard');
+    if(data.status == 200) res.cookie('userData', JSON.stringify(data.userData), data.options).cookie('tokenData', JSON.stringify(token), data.options).cookie('guilds', JSON.stringify(data.guilds), data.options).redirect('/dashboard');
 });
 
 async function login(res, token) {
@@ -101,7 +101,7 @@ async function login(res, token) {
   if(data.status != 200) return { status: 500 };
   data = data.data
 	token['expires_at'] = (Date.now() + options.maxAge);
-	return { status: 200, options: options, userData: identity, tokenData: token, guilds: data };
+	return { status: 200, options: options, userData: identity, guilds: data };
 }
 
 // route for logout
@@ -239,7 +239,7 @@ async function exchangeCode(code) {
 		return { status: 200, data: JSON.stringify(temp.data) };
 	}
 	catch (e) {
-		return { status: 500, data: e };
+		return { status: 500, data: JSON.stringify(e) };
 	}
 
 }
