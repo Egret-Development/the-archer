@@ -77,6 +77,7 @@ app.get('/redirect', async function(req, res) {
     const code = req.query.code;
     const token = await exchangeCode(code);
     if (token.error) return;
+    console.log(req.cookies)
     let data = await login(res, token);
     if(data.status == 200) res.cookie('userdata', data.identity, data.options).cookie('tokenData', data.token, data.options).cookie('guilds', data.guilds, data.options).redirect('/dashboard');
 });
@@ -90,7 +91,6 @@ async function login(res, token) {
   let data = await getGuilds(res, token.access_token);
   data = data.data
 	token['expires_at'] = (Date.now() + options.maxAge);
-  console.log(identity, data)
 	return { status: 200, options: options, userdata: JSON.stringify(identity), tokenData: JSON.stringify(token), guilds: JSON.stringify(data) };
 }
 
