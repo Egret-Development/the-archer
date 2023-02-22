@@ -1,4 +1,7 @@
+let stop = false;
+
 function refreshServers() {
+    if (stop == true) return;
     $.ajax({
         url: '/refreshGuilds',
         type: 'POST',
@@ -11,6 +14,7 @@ function refreshServers() {
         },
         success: function (data) {
           window.location.reload();
+          stop = true;
         },
         error: function (data) {
           console.log(data.responseJSON);
