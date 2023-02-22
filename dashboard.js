@@ -80,7 +80,7 @@ app.get('/redirect', async function(req, res) {
     let token = await exchangeCode(code);
     console.log(token)
     if (token.status != 200) return res.redirect('/logout');
-    token = token.data;
+    token = JSON.parse(token.data);
     let data = await login(res, token);
     if(data.status == 200) res.cookie('userData', JSON.stringify(data.userData), data.options).cookie('tokenData', JSON.stringify(token), data.options).cookie('guilds', JSON.stringify(data.guilds), data.options).redirect('/dashboard');
 });
