@@ -92,9 +92,7 @@ app.get('/redirect', async function(req, res) {
   });
 
 async function login(token, guildid) {
-  console.log(token)
 	let identity = await getIdentity(token);
-  console.log(identity)
   if(identity.status != 200) return { status: 500 };
   
   identity = identity.data;
@@ -105,7 +103,6 @@ async function login(token, guildid) {
     secure: true
 	};
   let data = guildid == undefined ? await getGuilds(token) : { status: 200, data: guildsList[guildid] };
-  console.log(data)
   if(data.status != 200) return { status: 500 };
   data = data.data
 	token['expires_at'] = (Date.now() + options.maxAge);
@@ -211,7 +208,6 @@ function isMalFormed(json){
 // Clear Cookies Route
 app.post('/refreshGuilds', async function(req, res) {
   try{
-    console.log(req.cookies, guildsList)
     let data = await getGuilds(req.cookies.tokenData)
     guildsList[req.cookies.id] = data.data;
     res.status(200).json({ status: 'success' })
