@@ -78,11 +78,9 @@ app.get('/login', function(req, res) {
 app.get('/redirect', async function(req, res) {
     const code = req.query.code;
     let token = JSON.parse(await exchangeCode(code));
-    console.log(token)
     if (token.status != 200) return res.redirect('/logout');
     token = token.data;
     let data = await login(res, token);
-    console.log(data)
     if(data.status == 200) res.cookie('userData', JSON.stringify(data.identity), data.options).cookie('tokenData', JSON.stringify(data.token), data.options).cookie('guilds', JSON.stringify(data.guilds), data.options).redirect('/dashboard');
 });
 
