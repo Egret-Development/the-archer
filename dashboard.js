@@ -78,6 +78,7 @@ app.get('/login', function(req, res) {
 app.get('/redirect', async function(req, res) {
     const code = req.query.code;
     let token = await exchangeCode(code);
+    console.log(token)
     if (token.status != 200) return res.redirect('/logout');
     token = token.data;
     let data = await login(res, token);
@@ -235,7 +236,6 @@ async function exchangeCode(code) {
 		},
 		data : data,
 	};
-	let token;
 	try {
 		const temp = await axios(payload);
 		return { status: 200, data: JSON.stringify(temp.data) };
