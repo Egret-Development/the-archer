@@ -12,6 +12,7 @@ const cookieParser = require('cookie-parser');
 const { PermissionsBitField } = require('discord.js');
 let Bot = require('./bot.js');
 const rateLimit = require('express-rate-limit')
+var cors = require('cors')
 
 let bot = new Bot();
 bot.login();
@@ -21,6 +22,7 @@ app.set('view engine', 'ejs');
 app.use(express.static('./views'));
 app.use(cookieParser());
 app.use(express.json());
+app.use(cors({ origin: true, credentials: true }))
 
 // route for index page
 app.get('/', function(req, res) {
@@ -65,7 +67,7 @@ async function login(res, token) {
 	const identity = await getIdentity(res, token.access_token);
 	let options = {
 		maxAge: (1000 * token.expires_in) - 10000,
-		httpOnly: false,
+		httpOnly: true,
 		signed: false,
 	};
   let data = await getGuilds(res, token.access_token);
