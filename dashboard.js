@@ -193,25 +193,25 @@ function isMalFormed(json){
 }
 
 // Clear Cookies Route
-app.post('/clear', function(req, res) {
-  try{
-    if(req.cookies[req.body.name] == undefined){
-      res.status(404).json({ status: 'Cookie already deleted!' })
-    }else{
-      res.clearCookie(req.body.name);
-      res.status(200).json({ status: 'success' })
-    }
-  }
-  catch(e){
-    console.error(e)
-    res.status(500).json(JSON.parse(JSON.stringify(e)))
-  }
-});
+// app.post('/clear', function(req, res) {
+//   try{
+//     if(req.cookies[req.body.name] == undefined){
+//       res.status(404).json({ status: 'Cookie already deleted!' })
+//     }else{
+//       res.clearCookie(req.body.name);
+//       res.status(200).json({ status: 'success' })
+//     }
+//   }
+//   catch(e){
+//     console.error(e)
+//     res.status(500).json(JSON.parse(JSON.stringify(e)))
+//   }
+// });
 
 // Clear Cookies Route
 app.post('/refreshGuilds', async function(req, res) {
   try{
-    console.log(req.cookies)
+    console.log(req.cookies, guildsList)
     let data = await getGuilds(req.cookies.tokenData)
     guildsList[req.cookies.id] = data.data;
     res.status(200).json({ status: 'success' })
