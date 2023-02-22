@@ -208,7 +208,7 @@ async function getGuilds(res, token) {
 	try {
 		const temp = await axios(payload);
 		guilds = temp.data;
-    return { status: 200, data: JSON.stringify(guilds)};
+    return { status: 200, data: guilds};
 	}
 	catch (e) {
 		e = JSON.stringify(e);
