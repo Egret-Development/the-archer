@@ -22,7 +22,11 @@ app.set('view engine', 'ejs');
 app.use(express.static('./views'));
 app.use(cookieParser());
 app.use(express.json());
-app.use(cors({ origin: true, credentials: true }))
+app.use(cors({
+  credentials: true,
+  origin: config.FRONTEND_URL ?? "http://localhost:80",
+  optionsSuccessStatus: 200,
+}))
 
 // route for index page
 app.get('/', function(req, res) {
@@ -56,11 +60,8 @@ app.get('/redirect', async function(req, res) {
     const token = await exchangeCode(code);
     if (token.error) return;
     let data = await login(res, token);
-    res.cookie('userdata', data.identity, data.options);
-    res.cookie('tokenData', data.token, data.options);
-    res.cookie('guilds', data.guilds, data.options);
+    if(data.status == 200) res.cookie('userdata', data.identity, data.options).cookie('tokenData', data.token, data.options).cookie('guilds', data.guilds, data.options).redirect('/dashboard');
     console.log(req.cookies)
-    if(data.status == 200) return console.log(res.redirect('/dashboard'));
 });
 
 async function login(res, token) {
@@ -103,10 +104,7 @@ app.get('/dashboard', async function(req, res) {
 		let newToken = await refreshCode(res, tokenData['refresh_token'])
 		if(!newToken) return;
     let data = await login(res, newToken);
-    res.cookie('userdata', data.identity, data.options);
-    res.cookie('tokenData', data.token, data.options);
-    res.cookie('guilds', data.guilds, data.options);
-    if(data.status == 200) return res.redirect('/dashboard');
+    if(data.status == 200)res.cookie('userdata', data.identity, data.options).cookie('tokenData', data.token, data.options).cookie('guilds', data.guilds, data.options).redirect('/dashboard');
 	};
 	let username = JSON.parse(req.cookies['userdata']);
   let guilds = req.cookies['guilds'];
