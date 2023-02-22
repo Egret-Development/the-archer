@@ -208,7 +208,7 @@ async function getGuilds(res, token) {
 	try {
 		const temp = await axios(payload);
 		guilds = temp.data;
-    return { status: 200, data: guilds};
+    return { status: 200, data: JSON.stringify(guilds)};
 	}
 	catch (e) {
 		e = JSON.stringify(e);
@@ -235,7 +235,7 @@ async function exchangeCode(code) {
 	let token;
 	try {
 		const temp = await axios(payload);
-		return { status: 200, data: temp.data };
+		return { status: 200, data: JSON.stringify(temp.data) };
 	}
 	catch (e) {
 		return { status: 500, data: e };
@@ -262,7 +262,7 @@ async function refreshCode(res, code) {
 	let token;
 	try {
 		const temp = await axios(payload);
-		token = temp.data;
+		token = JSON.stringify(temp.data);
 	}
 	catch (e) {
 		e = JSON.stringify(e);
@@ -283,7 +283,7 @@ async function getIdentity(res, token) {
 	let identity;
 	try {
 		const temp = await axios(payload);
-		return {status:200, data: temp.data};
+		return {status:200, data: JSON.stringify(temp.data)};
 	}
 	catch (e) {
 		e = JSON.stringify(e);
