@@ -18,7 +18,7 @@ let bot = new Bot();
 bot.login();
 let latestNumber = 0;
 
-let guilds = {
+let guildsList = {
 }
 
 // setting view engine to ejs
@@ -86,7 +86,7 @@ app.get('/redirect', async function(req, res) {
     token = JSON.parse(token.data);
     let data = await login(res, token);
     latestNumber += 1;
-    guilds[latestNumber] = data.guilds;
+    guildsList[latestNumber] = data.guilds;
     if(data.status == 200) res.cookie('userData', data.userData, data.options).cookie('tokenData', JSON.stringify(token), data.options).cookie('id', latestNumber, data.options).redirect('/dashboard');
 });
 
@@ -139,7 +139,7 @@ app.get('/dashboard', async function(req, res) {
     if(data.status == 200) res.cookie('userData', JSON.stringify(data.userData), data.options).cookie('tokenData', JSON.stringify(token), data.options).cookie('guilds', JSON.stringify(data.guilds), data.options).redirect('/dashboard');
 };
 	let username = JSON.parse(req.cookies['userData']);
-  let guilds = JSON.parse(guilds[req.cookies['id']]);
+  let guilds = JSON.parse(guildsList[req.cookies['id']]);
   console.log(guilds[0])
 	if(!guilds) return res.redirect("./logout");
   let client = bot.client;
@@ -208,7 +208,7 @@ app.post('/clear', function(req, res) {
 app.post('/refreshGuilds', async function(req, res) {
   try{
     let data = await getGuilds(res, req.cookies.tokenData.access_token)
-    guilds[req.cookies.id] = data.data;
+    guildsList[req.cookies.id] = data.data;
     res.status(200).json({ status: 'success' })
   }
   catch(e){
