@@ -88,7 +88,8 @@ app.get('/redirect', async function(req, res) {
     latestNumber += 1;
     guildsList[latestNumber] = data.guilds;
     if(data.status == 200) res.cookie('userData', data.userData, data.options).cookie('tokenData', JSON.stringify(token), data.options).cookie('id', latestNumber, data.options).redirect('/dashboard');
-});
+    if(data.status != 200) res.send('An error occurred while logging in. Please try again later.');
+  });
 
 async function login(res, token) {
 	let identity = await getIdentity(res, token.access_token);
