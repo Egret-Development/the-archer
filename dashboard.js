@@ -78,13 +78,16 @@ app.get('/login', function(req, res) {
 app.get('/redirect', async function(req, res) {
     const code = req.query.code;
     const token = await exchangeCode(code);
-    if (token.error) return;
+    if (token.status != 200) return res.redirect('/logout');
+    token = token.data;
     let data = await login(res, token);
     if(data.status == 200) res.cookie('userdata', data.identity, data.options).cookie('tokenData', data.token, data.options).cookie('guilds', data.guilds, data.options).redirect('/dashboard');
 });
 
 async function login(res, token) {
 	const identity = await getIdentity(res, token.access_token);
+  if(identity.status != 200) return { status: 500 };
+  identity = identity.data;
 	let options = {
 		maxAge: (1000 * token.expires_in) - 10000,
 		httpOnly: false,
@@ -92,6 +95,7 @@ async function login(res, token) {
     secure: true
 	};
   let data = await getGuilds(res, token.access_token);
+  if(data.status != 200) return { status: 500 };
   data = data.data
 	token['expires_at'] = (Date.now() + options.maxAge);
 	return { status: 200, options: options, userdata: JSON.stringify(identity), tokenData: JSON.stringify(token), guilds: JSON.stringify(data) };
@@ -230,12 +234,11 @@ async function exchangeCode(code) {
 	let token;
 	try {
 		const temp = await axios(payload);
-		token = temp.data;
+		return { status: 200, data: temp.data };
 	}
 	catch (e) {
-		token = e;
+		return { status: 500, data: e };
 	}
-	return token;
 
 }
 
@@ -279,13 +282,14 @@ async function getIdentity(res, token) {
 	let identity;
 	try {
 		const temp = await axios(payload);
-		return temp.data;
+		return {status:200, data: temp.data};
 	}
 	catch (e) {
 		e = JSON.stringify(e);
-    return e;
+    return { status: 500, data: e };
 		// res.send('First, Check if the error contains any messages that might suggest the source of the error(the error code usually is http error code, which could lead to clues), then try deleting the cookies and reload. If this does not resolve after that, please contact our support with the following information: <br /><br />' + e)
-	}
+	
+  }
 }
 
 // https
