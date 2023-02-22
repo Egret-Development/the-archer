@@ -93,7 +93,7 @@ app.get('/dashboard/logout', function(req, res) {
 // route for dashboard
 app.get('/dashboard', async function(req, res) {
   try{
-	if (req.cookies['userdata'] == undefined || req.cookies['tokenData'] == undefined) {
+	if (isMalFormed(req.cookies.tokenData) || isMalFormed(req.cookies.userdata) || isMalFormed(req.cookies.guilds)) {
 		return res.redirect('/login');
 	}
 	let tokenData = JSON.parse(req.cookies['tokenData']);
@@ -143,6 +143,17 @@ app.get('/server', async function(req, res) {
 	if(!botGuilds.includes(guild)) return res.redirect('/invite?server=' + guild);
 
 })
+
+function isMalFormed(json){
+  let malformed = false;
+  try{
+    JSON.parse(json)
+    malformed = false;
+  }catch(e) {
+    malformed = true;
+  }
+  return malformed;
+}
 
 // Clear Cookies Route
 app.post('/clear', function(req, res) {
