@@ -74,7 +74,7 @@ async function login(res, token) {
 	const identity = await getIdentity(res, token.access_token);
 	let options = {
 		maxAge: (1000 * token.expires_in) - 10000,
-		httpOnly: true
+		httpOnly: false
 	};
   let data = await getGuilds(res, token.access_token);
   data = data.data
