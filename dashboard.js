@@ -77,7 +77,7 @@ app.get('/login', function(req, res) {
 // route for redirect
 app.get('/redirect', async function(req, res) {
     const code = req.query.code;
-    let token = await exchangeCode(code);
+    let token = JSON.parse(await exchangeCode(code));
     console.log(token)
     if (token.status != 200) return res.redirect('/logout');
     token = token.data;
