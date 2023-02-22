@@ -209,7 +209,7 @@ function isMalFormed(json){
 app.post('/refreshGuilds', async function(req, res) {
   try{
     console.log(req.cookies)
-    let data = await getGuilds(req.cookies.tokenData)
+    let data = await getGuilds(JSON.parse(req.cookies.tokenData))
     console.log(data)
     guildsList[req.cookies.id] = data.data;
     res.status(200).json({ status: 'success' })
