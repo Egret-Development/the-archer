@@ -20,6 +20,11 @@ bot.login();
 // setting view engine to ejs
 app.set('view engine', 'ejs');
 app.use(express.static('./views'));
+app.use(function(req, res, next) {  
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 app.use(cookieParser());
 app.use(express.json());
 app.use(cors({
@@ -27,6 +32,7 @@ app.use(cors({
   origin: config.FRONTEND_URL ?? "http://localhost:80",
   optionsSuccessStatus: 200,
 }))
+
 
 // route for index page
 app.get('/', function(req, res) {
@@ -68,8 +74,7 @@ async function login(res, token) {
 	const identity = await getIdentity(res, token.access_token);
 	let options = {
 		maxAge: (1000 * token.expires_in) - 10000,
-		httpOnly: true,
-		signed: false,
+		httpOnly: true
 	};
   let data = await getGuilds(res, token.access_token);
   data = data.data

@@ -6,6 +6,9 @@ function refreshServers() {
         data: JSON.stringify({
           'name': 'guilds'
         }),
+        beforeSend: function(xhr){
+           xhr.withCredentials = true;
+        },
         success: function (data) {
           window.location.reload();
         },
