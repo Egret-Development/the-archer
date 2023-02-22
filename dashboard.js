@@ -208,11 +208,13 @@ function isMalFormed(json){
 // Clear Cookies Route
 app.post('/refreshGuilds', async function(req, res) {
   try{
-    console.log(JSON.parse(req.cookies.tokenData))
     let data = await getGuilds(JSON.parse(req.cookies.tokenData))
-    console.log(data)
-    guildsList[req.cookies.id] = data.data;
-    res.status(200).json({ status: 'success' })
+    if(data.status != 200){
+      res.status(500).redirect('/logout')
+    }else{
+      guildsList[req.cookies.id] = data.data;
+      res.status(200).json({ status: 'success' })
+    }
   }
   catch(e){
     console.error(e)
