@@ -87,7 +87,9 @@ app.get('/redirect', async function(req, res) {
 
 async function login(res, token) {
 	let identity = await getIdentity(res, token.access_token);
+  console.log(identity)
   if(identity.status != 200) return { status: 500 };
+  
   identity = identity.data;
 	let options = {
 		maxAge: (1000 * token.expires_in) - 10000,
@@ -96,6 +98,7 @@ async function login(res, token) {
     secure: true
 	};
   let data = await getGuilds(res, token.access_token);
+  console.log(data)
   if(data.status != 200) return { status: 500 };
   data = data.data
 	token['expires_at'] = (Date.now() + options.maxAge);
