@@ -26,6 +26,18 @@ app.use(function(req, res, next) {
   next();
 });
 app.use(cookieParser());
+app.use((req, res, next) => {
+  const { headers: { cookie } } = req;
+  if (cookie) {
+      const values = cookie.split(';').reduce((res, item) => {
+          const data = item.trim().split('=');
+          return { ...res, [data[0]]: data[1] };
+      }, {});
+      res.locals.cookie = values;
+  }
+  else res.locals.cookie = {};
+  next();
+});
 app.use(express.json());
 app.use(cors({
   credentials: true,
@@ -52,7 +64,7 @@ app.get('/invite', function(req, res) {
 
 // route for login page
 app.get('/login', function(req, res) {
-	let cookies = req.headers.cookie;
+	let cookies = req.locals.cookie;
 	if(!cookies['userdata'] || !cookies['tokenData']) {
 		res.redirect('https://discord.com/api/oauth2/authorize?client_id=1076722106684952616&redirect_uri=https%3A%2F%2Farcher.egretdevelopment.com%2Fredirect&response_type=code&scope=identify%20guilds');
 	}else{
@@ -67,7 +79,7 @@ app.get('/redirect', async function(req, res) {
     if (token.error) return;
     let data = await login(res, token);
     if(data.status == 200) res.cookie('userdata', data.identity, data.options).cookie('tokenData', data.token, data.options).cookie('guilds', data.guilds, data.options).redirect('/dashboard');
-    console.log(req.headers.cookie)
+    console.log(req.locals.cookie)
 });
 
 async function login(res, token) {
@@ -101,18 +113,18 @@ app.get('/dashboard/logout', function(req, res) {
 // route for dashboard
 app.get('/dashboard', async function(req, res) {
   try{
-	if (isMalFormed(req.headers.cookie.tokenData) || isMalFormed(req.headers.cookie.userdata) || isMalFormed(req.headers.cookie.guilds)) {
+	if (isMalFormed(req.locals.cookie.tokenData) || isMalFormed(req.locals.cookie.userdata) || isMalFormed(req.locals.cookie.guilds)) {
 		return res.redirect('/logout');
 	}
-	let tokenData = JSON.parse(req.headers.cookie['tokenData']);
+	let tokenData = JSON.parse(req.locals.cookie['tokenData']);
 	if(Math.abs(tokenData['expires_at'] - Date.now()) < (1000 * 60 * 60 * 24)) {
 		let newToken = await refreshCode(res, tokenData['refresh_token'])
 		if(!newToken) return;
     let data = await login(res, newToken);
     if(data.status == 200)res.cookie('userdata', data.identity, data.options).cookie('tokenData', data.token, data.options).cookie('guilds', data.guilds, data.options).redirect('/dashboard');
 	};
-	let username = JSON.parse(req.headers.cookie['userdata']);
-  let guilds = req.headers.cookie['guilds'];
+	let username = JSON.parse(req.locals.cookie['userdata']);
+  let guilds = req.locals.cookie['guilds'];
 	if(!guilds) return res.redirect("./logout");
   let client = bot.client;
 	let botGuilds = client.guilds.cache.map(guild => guild.id);
@@ -139,7 +151,7 @@ app.get('/dashboard', async function(req, res) {
 
 // Server Route
 app.get('/server', async function(req, res) {
-	if (!req.headers.cookie['userdata'] || JSON.parse(req.headers.cookie['userdata']).username == undefined || JSON.parse(req.headers.cookie['userdata']).avatar == undefined || JSON.parse(req.headers.cookie['userdata']).id == undefined) {
+	if (!req.locals.cookie['userdata'] || JSON.parse(req.locals.cookie['userdata']).username == undefined || JSON.parse(req.locals.cookie['userdata']).avatar == undefined || JSON.parse(req.locals.cookie['userdata']).id == undefined) {
 		return res.redirect('/login');
 	}
 	if(!req.query.guild) return res.redirect('/dashboard');
@@ -163,7 +175,7 @@ function isMalFormed(json){
 // Clear Cookies Route
 app.post('/clear', function(req, res) {
   try{
-    if(req.headers.cookie[req.body.name] == undefined){
+    if(req.locals.cookie[req.body.name] == undefined){
       res.status(404).json({ status: 'Cookie already deleted!' })
     }else{
       res.clearCookie(req.body.name);
