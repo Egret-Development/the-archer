@@ -28,6 +28,7 @@ app.use(function(req, res, next) {
 app.use(cookieParser());
 app.use((req, res, next) => {
   const { headers: { cookie } } = req;
+  console.log("hi", cookie)
   if (cookie) {
       const values = cookie.split(';').reduce((res, item) => {
           const data = item.trim().split('=');
