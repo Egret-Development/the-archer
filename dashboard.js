@@ -93,7 +93,7 @@ app.get('/redirect', async function(req, res) {
 
 async function login(res, token) {
   console.log(token)
-	let identity = await getIdentity(res, token.access_token);
+	let identity = await getIdentity(token);
   console.log(identity)
   if(identity.status != 200) return { status: 500 };
   
@@ -104,7 +104,7 @@ async function login(res, token) {
     sameSite: 'none',
     secure: true
 	};
-  let data = await getGuilds(res, token.access_token);
+  let data = await getGuilds(token);
   console.log(data)
   if(data.status != 200) return { status: 500 };
   data = data.data
@@ -212,7 +212,7 @@ app.post('/clear', function(req, res) {
 app.post('/refreshGuilds', async function(req, res) {
   try{
     console.log(req.cookies)
-    let data = await getGuilds(req.cookies.tokenData.access_token)
+    let data = await getGuilds(req.cookies.tokenData)
     guildsList[req.cookies.id] = data.data;
     res.status(200).json({ status: 'success' })
   }
@@ -227,7 +227,7 @@ async function getGuilds(token) {
 		method: 'get',
 		url: 'https://discord.com/api/v10/users/@me/guilds',
 		headers: {
-			'Authorization': 'Bearer ' + token,
+			'Authorization': token['token_type'] + " " + token["access_token"],
 		},
 	};
 	let guilds;
@@ -297,12 +297,12 @@ async function refreshCode(res, code) {
 
 }
 
-async function getIdentity(res, token) {
+async function getIdentity(token) {
 	const payload = {
 		method: 'get',
 		url: 'https://discord.com/api/v10/users/@me',
 		headers: {
-			'Authorization': 'Bearer ' + token,
+			'Authorization': token['token_type'] + " " + token["access_token"],
 		},
 	};
 	let identity;
