@@ -20,26 +20,7 @@ bot.login();
 app.set('view engine', 'ejs');
 app.use(express.static('./views'));
 app.use(cookieParser());
-
 app.use(express.json());
-
-function logErrors (err, req, res, next) {
-  console.error(err.stack)
-  next(err)
-}
-
-function clientErrorHandler (err, req, res, next) {
-  if (req.xhr) {
-    res.status(500).send({ error: 'Something failed!' })
-  } else {
-    next(err)
-  }
-}
-
-function errorHandler (err, req, res, next) {
-  res.status(500)
-  res.render('error', { error: err })
-}
 
 // route for index page
 app.get('/', function(req, res) {
@@ -84,7 +65,7 @@ async function login(res, token) {
 	const identity = await getIdentity(res, token.access_token);
 	let options = {
 		maxAge: (1000 * token.expires_in) - 10000,
-		httpOnly: true,
+		httpOnly: false,
 		signed: false,
 	};
   let data = await getGuilds(res, token.access_token);
