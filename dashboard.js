@@ -104,16 +104,16 @@ async function login(res, token) {
 
 // route for logout
 app.get('/logout', function(req, res) {
-	res.clearCookie('userdata');
-	res.clearCookie('tokenData');
-	res.clearCookie('guilds');
+	// res.clearCookie('userdata');
+	// res.clearCookie('tokenData');
+	// res.clearCookie('guilds');
 	res.redirect('/');
 });
 // route for logout
 app.get('/dashboard/logout', function(req, res) {
-	res.clearCookie('userdata');
-	res.clearCookie('tokenData');
-	res.clearCookie('guilds');
+	// res.clearCookie('userdata');
+	// res.clearCookie('tokenData');
+	// res.clearCookie('guilds');
 	res.redirect('/');
 });
 
