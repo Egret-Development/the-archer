@@ -28,7 +28,6 @@ app.use(function(req, res, next) {
 app.use(cookieParser());
 app.use((req, res, next) => {
   const { headers: { cookie } } = req;
-  console.log("hi", cookie)
   if (cookie) {
       const values = cookie.split(';').reduce((res, item) => {
           const data = item.trim().split('=');
@@ -259,7 +258,7 @@ async function refreshCode(res, code) {
 	}
 	catch (e) {
 		e = JSON.stringify(e);
-		res.send('First, Check if the error contains any messages that might suggest the source of the error(the error code usually is http error code, which could lead to clues), then try deleting the cookies and reload. If this does not resolve after that, please contact our support with the following information: <br /><br />' + e)
+		// res.send('First, Check if the error contains any messages that might suggest the source of the error(the error code usually is http error code, which could lead to clues), then try deleting the cookies and reload. If this does not resolve after that, please contact our support with the following information: <br /><br />' + e)
 	}
 	return token;
 
@@ -276,13 +275,13 @@ async function getIdentity(res, token) {
 	let identity;
 	try {
 		const temp = await axios(payload);
-		identity = temp.data;
+		return temp.data;
 	}
 	catch (e) {
 		e = JSON.stringify(e);
-		res.send('First, Check if the error contains any messages that might suggest the source of the error(the error code usually is http error code, which could lead to clues), then try deleting the cookies and reload. If this does not resolve after that, please contact our support with the following information: <br /><br />' + e)
+    return e;
+		// res.send('First, Check if the error contains any messages that might suggest the source of the error(the error code usually is http error code, which could lead to clues), then try deleting the cookies and reload. If this does not resolve after that, please contact our support with the following information: <br /><br />' + e)
 	}
-	return identity;
 }
 
 // https
