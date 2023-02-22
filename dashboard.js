@@ -207,7 +207,8 @@ app.post('/clear', function(req, res) {
 // Clear Cookies Route
 app.post('/refreshGuilds', async function(req, res) {
   try{
-    let data = await getGuilds(res, req.cookies.tokenData.access_token)
+    console.log(req.cookies)
+    let data = await getGuilds(req.cookies.tokenData.access_token)
     guildsList[req.cookies.id] = data.data;
     res.status(200).json({ status: 'success' })
   }
@@ -217,7 +218,7 @@ app.post('/refreshGuilds', async function(req, res) {
   }
 });
 
-async function getGuilds(res, token) {
+async function getGuilds(token) {
 	const payload = {
 		method: 'get',
 		url: 'https://discord.com/api/v10/users/@me/guilds',
