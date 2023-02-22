@@ -67,7 +67,7 @@ app.get('/invite', function(req, res) {
 // route for login page
 app.get('/login', function(req, res) {
 	let cookies = req.cookies;
-	if(!cookies['userdata'] || !cookies['tokenData']) {
+	if(!cookies['userData'] || !cookies['tokenData']) {
 		res.redirect('https://discord.com/api/oauth2/authorize?client_id=1076722106684952616&redirect_uri=https%3A%2F%2Farcher.egretdevelopment.com%2Fredirect&response_type=code&scope=identify%20guilds');
 	}else{
 		res.redirect('/dashboard');
@@ -82,7 +82,7 @@ app.get('/redirect', async function(req, res) {
     token = token.data;
     let data = await login(res, token);
     console.log(data)
-    if(data.status == 200) res.cookie('userdata', JSON.stringify(data.identity), data.options).cookie('tokenData', JSON.stringify(data.token), data.options).cookie('guilds', JSON.stringify(data.guilds), data.options).redirect('/dashboard');
+    if(data.status == 200) res.cookie('userData', JSON.stringify(data.identity), data.options).cookie('tokenData', JSON.stringify(data.token), data.options).cookie('guilds', JSON.stringify(data.guilds), data.options).redirect('/dashboard');
 });
 
 async function login(res, token) {
@@ -99,19 +99,19 @@ async function login(res, token) {
   if(data.status != 200) return { status: 500 };
   data = data.data
 	token['expires_at'] = (Date.now() + options.maxAge);
-	return { status: 200, options: options, userdata: identity, tokenData: token, guilds: data };
+	return { status: 200, options: options, userData: identity, tokenData: token, guilds: data };
 }
 
 // route for logout
 app.get('/logout', function(req, res) {
-	// res.clearCookie('userdata');
+	// res.clearCookie('userData');
 	// res.clearCookie('tokenData');
 	// res.clearCookie('guilds');
 	res.redirect('/');
 });
 // route for logout
 app.get('/dashboard/logout', function(req, res) {
-	// res.clearCookie('userdata');
+	// res.clearCookie('userData');
 	// res.clearCookie('tokenData');
 	// res.clearCookie('guilds');
 	res.redirect('/');
@@ -121,7 +121,7 @@ app.get('/dashboard/logout', function(req, res) {
 app.get('/dashboard', async function(req, res) {
   console.log(req.cookies)
   try{
-	if (isMalFormed(req.cookies.tokenData) || isMalFormed(req.cookies.userdata) || isMalFormed(req.cookies.guilds)) {
+	if (isMalFormed(req.cookies.tokenData) || isMalFormed(req.cookies.userData) || isMalFormed(req.cookies.guilds)) {
 		return res.redirect('/logout');
 	}
 	let tokenData = JSON.parse(req.cookies['tokenData']);
@@ -129,9 +129,9 @@ app.get('/dashboard', async function(req, res) {
 		let newToken = await refreshCode(res, tokenData['refresh_token'])
 		if(!newToken) return;
     let data = await login(res, newToken);
-    if(data.status == 200) res.cookie('userdata', data.identity, data.options).cookie('tokenData', data.token, data.options).cookie('guilds', data.guilds, data.options).redirect('/dashboard');
-};
-	let username = JSON.parse(req.cookies['userdata']);
+    if(data.status == 200) res.cookie('userData', JSON.stringify(data.identity), data.options).cookie('tokenData', JSON.stringify(data.token), data.options).cookie('guilds', JSON.stringify(data.guilds), data.options).redirect('/dashboard');
+  };
+	let username = JSON.parse(req.cookies['userData']);
   let guilds = req.cookies['guilds'];
 	if(!guilds) return res.redirect("./logout");
   let client = bot.client;
@@ -159,7 +159,7 @@ app.get('/dashboard', async function(req, res) {
 
 // Server Route
 app.get('/server', async function(req, res) {
-	if (!req.cookies['userdata'] || JSON.parse(req.cookies['userdata']).username == undefined || JSON.parse(req.cookies['userdata']).avatar == undefined || JSON.parse(req.cookies['userdata']).id == undefined) {
+	if (!req.cookies['userData'] || JSON.parse(req.cookies['userData']).username == undefined || JSON.parse(req.cookies['userData']).avatar == undefined || JSON.parse(req.cookies['userData']).id == undefined) {
 		return res.redirect('/login');
 	}
 	if(!req.query.guild) return res.redirect('/dashboard');
