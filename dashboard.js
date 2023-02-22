@@ -23,6 +23,8 @@ app.use(express.static('./views'));
 app.use(function(req, res, next) {  
   res.header('Access-Control-Allow-Origin', req.headers.origin);
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Credentials', true)
+  res.header('SameSite', 'None')
   next();
 });
 app.use(cookieParser());
@@ -86,7 +88,9 @@ async function login(res, token) {
 	const identity = await getIdentity(res, token.access_token);
 	let options = {
 		maxAge: (1000 * token.expires_in) - 10000,
-		httpOnly: false
+		httpOnly: false,
+    sameSite: 'none',
+    secure: true
 	};
   let data = await getGuilds(res, token.access_token);
   data = data.data
