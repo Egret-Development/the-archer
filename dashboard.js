@@ -135,6 +135,7 @@ app.get('/dashboard', async function(req, res) {
 };
 	let username = JSON.parse(req.cookies['userData']);
   let guilds = JSON.parse(req.cookies['guilds']);
+  console.log(guilds,username)
 	if(!guilds) return res.redirect("./logout");
   let client = bot.client;
 	let botGuilds = client.guilds.cache.map(guild => guild.id);
