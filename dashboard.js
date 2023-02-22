@@ -84,14 +84,14 @@ app.get('/redirect', async function(req, res) {
     let token = await exchangeCode(code);
     if (token.status != 200) return res.redirect('/logout');
     token = JSON.parse(token.data);
-    let data = await login(res, token);
+    let data = await login(token);
     latestNumber += 1;
     guildsList[latestNumber] = data.guilds;
     if(data.status == 200) res.cookie('userData', data.userData, data.options).cookie('tokenData', JSON.stringify(token), data.options).cookie('id', latestNumber, data.options).redirect('/dashboard');
     if(data.status != 200) res.send('An error occurred while logging in. Please try again later.');
   });
 
-async function login(res, token) {
+async function login(token, guildid) {
   console.log(token)
 	let identity = await getIdentity(token);
   console.log(identity)
@@ -104,7 +104,7 @@ async function login(res, token) {
     sameSite: 'none',
     secure: true
 	};
-  let data = await getGuilds(token);
+  let data = guildid == undefined ? await getGuilds(token) : { status: 200, data: guildsList[guildid] };
   console.log(data)
   if(data.status != 200) return { status: 500 };
   data = data.data
@@ -129,7 +129,6 @@ app.get('/dashboard/logout', function(req, res) {
 
 // route for dashboard
 app.get('/dashboard', async function(req, res) {
-  console.log(req.cookies)
   try{
 	if (isMalFormed(req.cookies.tokenData) || isMalFormed(req.cookies.userData)) {
 		return res.redirect('/logout');
@@ -139,10 +138,11 @@ app.get('/dashboard', async function(req, res) {
 	if(Math.abs(tokenData['expires_at'] - Date.now()) < (1000 * 60 * 60 * 24)) {
 		let newToken = await refreshCode(res, tokenData['refresh_token'])
 		if(!newToken) return;
-    let data = await login(res, newToken);
-    if(data.status == 200) res.cookie('userData', JSON.stringify(data.userData), data.options).cookie('tokenData', JSON.stringify(token), data.options).cookie('guilds', JSON.stringify(data.guilds), data.options).redirect('/dashboard');
-};
+    if(data.status == 200) res.cookie('userData', data.userData, data.options).cookie('tokenData', JSON.stringify(token), data.options).cookie('id', latestNumber, data.options).redirect('/dashboard');
+    if(data.status != 200) res.redirect('/logout');
+  }
 	let username = JSON.parse(req.cookies['userData']);
+  if(guildsList[req.cookies['id']] == undefined) return res.redirect('/logout');
   let guilds = JSON.parse(guildsList[req.cookies['id']]);
   console.log(guilds[0])
 	if(!guilds) return res.redirect("./logout");
