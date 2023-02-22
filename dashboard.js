@@ -80,7 +80,6 @@ app.get('/redirect', async function(req, res) {
     const token = await exchangeCode(code);
     if (token.error) return;
     let data = await login(res, token);
-    console.log(req.cookies)
     if(data.status == 200) res.cookie('userdata', data.identity, data.options).cookie('tokenData', data.token, data.options).cookie('guilds', data.guilds, data.options).redirect('/dashboard');
 });
 
@@ -115,6 +114,7 @@ app.get('/dashboard/logout', function(req, res) {
 
 // route for dashboard
 app.get('/dashboard', async function(req, res) {
+  console.log(req.cookies)
   try{
 	if (isMalFormed(req.cookies.tokenData) || isMalFormed(req.cookies.userdata) || isMalFormed(req.cookies.guilds)) {
 		return res.redirect('/logout');
