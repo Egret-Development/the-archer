@@ -94,7 +94,7 @@ app.get('/dashboard/logout', function(req, res) {
 app.get('/dashboard', async function(req, res) {
   try{
 	if (isMalFormed(req.cookies.tokenData) || isMalFormed(req.cookies.userdata) || isMalFormed(req.cookies.guilds)) {
-		return res.redirect('/login');
+		return res.redirect('/logout');
 	}
 	let tokenData = JSON.parse(req.cookies['tokenData']);
 	if(Math.abs(tokenData['expires_at'] - Date.now()) < (1000 * 60 * 60 * 24)) {
