@@ -81,7 +81,7 @@ app.get('/redirect', async function(req, res) {
     if (token.status != 200) return res.redirect('/logout');
     token = JSON.parse(token.data);
     let data = await login(res, token);
-    if(data.status == 200) res.cookie('userData', JSON.stringify(data.userData), data.options).cookie('tokenData', JSON.stringify(token), data.options).cookie('guilds', JSON.stringify(data.guilds), data.options).redirect('/dashboard');
+    if(data.status == 200) res.cookie('userData', data.userData, data.options).cookie('tokenData', token, data.options).cookie('guilds', data.guilds, data.options).redirect('/dashboard');
 });
 
 async function login(res, token) {
