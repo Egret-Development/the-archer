@@ -85,7 +85,6 @@ app.get('/redirect', async function(req, res) {
     if (token.status != 200) return res.redirect('/logout');
     token = JSON.parse(token.data);
     let data = await login(res, token);
-    res.redirect("/dashboard")
     latestNumber += 1;
     guilds[latestNumber] = data.guilds;
     if(data.status == 200) res.cookie('userData', data.userData, data.options).cookie('tokenData', JSON.stringify(token), data.options).cookie('id', latestNumber, data.options).redirect('/dashboard');
