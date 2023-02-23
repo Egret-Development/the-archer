@@ -38,7 +38,7 @@ class Bot{
       });
       console.log(this.client.applicationCommands);
       // require('./utils/helperFunctions.js')['updateGuildCommand'](this.client.guildCommands);
-      require('./utils/helperFunctions.js')['updateCommand'](this.client.applicationCommands);
+      // require('./utils/helperFunctions.js')['updateCommand'](this.client.applicationCommands);
     });
 
     // * Event Listeners
