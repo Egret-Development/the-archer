@@ -15,6 +15,7 @@ module.exports = {
         {name: "Client Ping", value: `${client.ws.ping}ms`, inline: true},
         {name: "Message Delay", value: `${Math.abs(interaction.createdAt - Date.now())}ms`, inline: true}
       ])
+      .setFooter({ text: `Powered by The Archer`, iconURL: client.user.avatarURL() });
 		await interaction.reply({ embeds: [pingEmbed] });
 	},
 	options: {},
