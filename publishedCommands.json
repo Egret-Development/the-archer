@@ -1,9 +1,11 @@
 {
   "guildCommands": [
     "ping",
-    "website"
+    "website",
+    "uptime"
   ],
   "applicationCommands": [
-    "website"
+    "website",
+    "support"
   ]
 }
