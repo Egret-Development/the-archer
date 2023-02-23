@@ -7,7 +7,7 @@ module.exports = {
 	category: 'information',
 	production: true,
 	publish: true,
-	async execute(interaction) {
+	async execute(interaction, client) {
     let websiteEmbed = new EmbedBuilder()
       .setTitle("The Archer Official Website")
       .setColor("#87CEEB")
