@@ -2,7 +2,8 @@
   "guildCommands": [
     "ping",
     "website",
-    "uptime"
+    "uptime",
+    "kick"
   ],
   "applicationCommands": [
     "website",

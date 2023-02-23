@@ -18,7 +18,7 @@ class Bot{
   constructor(){
     // * Library setups
     // Discord.js
-    this.client = new Client({ intents: [GatewayIntentBits.Guilds] });
+    this.client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
 
     // Define commands
     this.client.applicationCommands = [];
@@ -36,9 +36,11 @@ class Bot{
           }
         }
       });
-      console.log(this.client.applicationCommands);
-      // require('./utils/helperFunctions.js')['updateGuildCommand'](this.client.guildCommands);
-      // require('./utils/helperFunctions.js')['updateCommand'](this.client.applicationCommands);
+      // console.log(this.client.applicationCommands);
+      // require('./utils/helperFunctions.js')['removeGuildCommand'](this.client.guildCommands);
+      // require('./utils/helperFunctions.js')['removeCommand'](this.client.applicationCommands);
+      // require('./utils/helperFunctions.js')['publishGuildCommand'](this.client.guildCommands);
+      // require('./utils/helperFunctions.js')['publishCommand'](this.client.applicationCommands);
     });
 
     // * Event Listeners

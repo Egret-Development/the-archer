@@ -37,6 +37,7 @@ class Command {
 			if (!Array.isArray(options['inputOptions'])) throw new TypeError('InputOptions must be an array.');
 			this.inputOptions = options['inputOptions'];
 		}
+    this.permissions = options['permissions'] ? options['permissions'] : undefined;
 
 		// * Setting the parameters to the class
 		this.client = client;
@@ -62,6 +63,9 @@ class Command {
 		let slashCommandOptions = new SlashCommandBuilder()
 			.setName(this.name)
 			.setDescription(this.description);
+    if(this.permissions){
+      slashCommandOptions = slashCommandOptions.setDefaultMemberPermissions(this.permissions);
+    }
 		if (this.inputOptions) {
 			loadSlashCommandInputs(this.inputOptions, slashCommandOptions);
 		}
