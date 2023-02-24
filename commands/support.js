@@ -1,5 +1,5 @@
 // * Description: The support
-const { EmbedBuilder } = require("discord.js");
+const { EmbedBuilder, ButtonBuilder } = require("discord.js");
 const actionBuilder = require("../classes/actionBuilder.js");
 
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
 	publish: true,
 	async execute(interaction, client) {
     let builder = new actionBuilder(client);
-    let serverButton = builder.buttonBuilder
+    let serverButton = new ButtonBuilder()
       .setURL("https://discord.gg/CsWYJENUha")
       .setLabel('Discord Support Server')
       .setStyle(builder.buttonStyle.Link);

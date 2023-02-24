@@ -1,5 +1,5 @@
 // * Description: The website command
-const { EmbedBuilder } = require("discord.js");
+const { EmbedBuilder, ButtonBuilder } = require("discord.js");
 const actionBuilder = require("../classes/actionBuilder.js");
 
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
 	publish: true,
 	async execute(interaction, client) {
     let builder = new actionBuilder(client);
-    let button = builder.buttonBuilder
+    let button = new ButtonBuilder()
       .setURL("https://archer.egretdevelopment.com")
       .setLabel('Website')
       .setStyle(builder.buttonStyle.Link);

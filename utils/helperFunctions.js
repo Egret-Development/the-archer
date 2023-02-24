@@ -52,8 +52,6 @@ exports.publishCommand = async function(commands) {
 
 // * Remove all guild command
 exports.removeGuildCommand = async function(commands) {
-	if (commands.length == 0) return;
-	console.log(commands);
 	try {
 		console.log('Started removing ' + commands.length + ' guild (/) commands.');
 
