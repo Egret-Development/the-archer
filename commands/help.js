@@ -7,7 +7,7 @@ module.exports = {
 	name: 'help',
 	description: 'Receive help on all the commands!!',
 	category: 'information',
-	production: false,
+	production: true,
 	publish: true,
 	async execute(interaction, client) {
     let builder = new actionBuilder(client, async (interaction) => {
