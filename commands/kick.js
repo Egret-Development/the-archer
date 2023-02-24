@@ -6,7 +6,7 @@ module.exports = {
 	name: 'kick',
 	description: 'Kick a member from the server!',
 	category: 'moderation',
-	production: false,
+	production: true,
 	publish: true,
 	async execute(interaction, client) {
     const author = interaction.author
