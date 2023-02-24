@@ -1,12 +1,18 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, Events } = require('discord.js');
 
 module.exports = class actionBuilder{
-  constructor(){
+  #buttons = [];
+  constructor(client, callback){
     this.actions = new ActionRowBuilder();
-    this.buttonBuilder = new ButtonBuilder();
     this.buttonStyle = ButtonStyle;
+    client.on(Events.InteractionCreate, interaction => {
+      if (!interaction.isButton()) return;
+      if(!this.#buttons.includes(interaction.customId)) return;
+      callback(interaction);
+    });
   }
   addComponent(data){
+    this.#buttons.push(data.data['custom_id'])
     this.actions.addComponents(data);
     return this;
   }

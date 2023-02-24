@@ -22,6 +22,7 @@ class Bot{
 
     // Define commands
     this.client.applicationCommands = [];
+    this.client.commands = [];
     this.client.guildCommands = [];
     fs.readdir(path.join(__dirname, './commands'), (err, files) => {
       if (err) return console.error(err);
@@ -29,7 +30,9 @@ class Bot{
         file = require('./commands/' + file);
         if (file.publish == true) {
           if (file.production == true) {
-            this.client.applicationCommands.push(new Command(this.client, file.name, file.description, file.category, file.production, file.publish, file.execute, file.options).build()['slashCommandOptions']);
+            let push = new Command(this.client, file.name, file.description, file.category, file.production, file.publish, file.execute, file.options);
+            this.client.applicationCommands.push(push.build()['slashCommandOptions']);
+            this.client.commands.push(push)
           }
           else if (file.production == false) {
             this.client.guildCommands.push(new Command(this.client, file.name, file.description, file.category, file.production, file.publish, file.execute, file.options).build()['slashCommandOptions']);

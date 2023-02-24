@@ -9,7 +9,7 @@ module.exports = {
 	production: true,
 	publish: true,
 	async execute(interaction, client) {
-    let builder = new actionBuilder();
+    let builder = new actionBuilder(client);
     let button = builder.buttonBuilder
       .setURL("https://archer.egretdevelopment.com")
       .setLabel('Website')

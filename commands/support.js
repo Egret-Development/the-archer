@@ -9,7 +9,7 @@ module.exports = {
 	production: true,
 	publish: true,
 	async execute(interaction, client) {
-    let builder = new actionBuilder();
+    let builder = new actionBuilder(client);
     let serverButton = builder.buttonBuilder
       .setURL("https://discord.gg/CsWYJENUha")
       .setLabel('Discord Support Server')
