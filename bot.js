@@ -40,7 +40,7 @@ class Bot{
       // require('./utils/helperFunctions.js')['removeGuildCommand'](this.client.guildCommands);
       // require('./utils/helperFunctions.js')['removeCommand'](this.client.applicationCommands);
       // require('./utils/helperFunctions.js')['publishGuildCommand'](this.client.guildCommands);
-      // require('./utils/helperFunctions.js')['publishCommand'](this.client.applicationCommands);
+      require('./utils/helperFunctions.js')['publishCommand'](this.client.applicationCommands);
     });
 
     // * Event Listeners

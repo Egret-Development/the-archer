@@ -12,15 +12,15 @@ module.exports = {
     const author = interaction.author
 		const target = interaction.options.getUser('target');
 		const reason = interaction.options.getString('reason') ?? 'No reason provided';
-    const member = interaction.guild.members.cache.get(target.id);
-    if(!member.kickable){
-      let error = errorEmbed("You cannot kick this user!", client);
+    if(!interaction.guild.members.cache.get(target.id).kickable){
+      let error = errorEmbed("I cannot kick this user!", client);
       await interaction.reply({ embeds: [error] });
       return
     }
 
-		await interaction.reply(`Banning ${target.username} for reason: ${reason}`);
-		await member.kick(reason);
+		await interaction.reply(`Kicking ${target.username} for reason: ${reason}`);
+    const kick = await interaction.guild.members.kick(target, reason);
+    let kickinfo = kick.user?.tag ?? kick.tag ?? kick
     let kickEmbed = new EmbedBuilder()
       .setTitle("Kicked " + target.tag + "!")
       .setColor("#87CEEB")
