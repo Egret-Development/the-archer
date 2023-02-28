@@ -9,7 +9,6 @@ module.exports = {
 	production: true,
 	publish: true,
 	async execute(interaction, client) {
-    const author = interaction.author
 		const target = interaction.options.getUser('target');
 		const reason = interaction.options.getString('reason') ?? 'No reason provided';
     if(!interaction.guild.members.cache.get(target.id).kickable){
@@ -20,7 +19,6 @@ module.exports = {
 
 		await interaction.reply(`Kicking ${target.username} for reason: ${reason}`);
     const kick = await interaction.guild.members.kick(target, reason);
-    let kickinfo = kick.user?.tag ?? kick.tag ?? kick
     let kickEmbed = new EmbedBuilder()
       .setTitle("Kicked " + target.tag + "!")
       .setColor("#87CEEB")
@@ -28,6 +26,14 @@ module.exports = {
         {name: "Reason", value: reason, inline: false}
       ])
       .setFooter({ text: `Powered by The Archer`, iconURL: client.user.avatarURL() });
+      let kickNotifEmbed = new EmbedBuilder()
+        .setTitle("You have been kicked from " + interaction.guild.name + "!")
+        .setColor("#87CEEB")
+        .setFields([
+          {name: "Reason", value: reason, inline: false}
+        ])
+        .setFooter({ text: `Powered by The Archer`, iconURL: client.user.avatarURL() });
+    client.users.cache.get(target.id).send({ embeds: [kickNotifEmbed] }).catch(() => {});
 		await interaction.followUp({ embeds: [kickEmbed] });
 	},
 	options: {
