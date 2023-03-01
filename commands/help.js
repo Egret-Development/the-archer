@@ -13,9 +13,9 @@ module.exports = {
     let builder = new actionBuilder(client, async (interaction) => {
       let category = interaction.customId.split(".")[1]
         let categoryHelpEmbed = new EmbedBuilder()
-          .setTitle("Help!")
+          .setTitle("Category Help!")
           .setColor("#87CEEB")
-          .setDescription("Select a category below to view the commands in that category!")
+          .setDescription("Below is a list of commands inside the " + category + " category!")
           .setFooter({ text: `Powered by The Archer`, iconURL: client.user.avatarURL(), ephemeral: true });
         let commands = []
         for(i in client.commands) {
@@ -40,12 +40,12 @@ module.exports = {
         .setStyle(builder.buttonStyle.Primary);
       builder.addComponent(button)
     }
-    let pingEmbed = new EmbedBuilder()
+    let helpEmbed = new EmbedBuilder()
       .setTitle("Help!")
       .setColor("#87CEEB")
       .setDescription("Select a category below to view the commands in that category!")
       .setFooter({ text: `Powered by The Archer`, iconURL: client.user.avatarURL() });
-		await interaction.reply({ embeds: [pingEmbed], components: [builder.build()], ephemeral: true });
+		await interaction.reply({ embeds: [helpEmbed], components: [builder.build()], ephemeral: true });
 	},
 	options: {},
 };
