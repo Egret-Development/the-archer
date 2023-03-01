@@ -4,7 +4,7 @@ const { EmbedBuilder } = require("discord.js");
 module.exports = {
 	name: 'uptime',
 	description: 'Information on how long the bot has been up!',
-	category: 'information',
+	category: 'botinfo',
 	production: true,
 	publish: true,
 	async execute(interaction, client) {

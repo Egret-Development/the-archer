@@ -8,7 +8,7 @@ const { errorEmbed } = require("../utils/helperFunctions");
 module.exports = {
 	name: 'tweet',
 	description: 'Create a twitter post!',
-	category: 'image',
+	category: 'fun',
 	production: true,
 	publish: true,
 	async execute(interaction, client) {
@@ -81,14 +81,10 @@ module.exports = {
   },
 };
 
+
 async function isImgUrl(url) {
-  try{
-    let res = await fetch(url, {method: 'HEAD'})
-    res = res.headers.get('Content-Type').startsWith('image')
-    return res
-  }catch(e){
-    return false
-  }
+  if (url.toLowerCase().includes(".png") || url.toLowerCase().includes(".jpg") || url.toLowerCase().includes(".jpeg")) return true;
+  return false;
 }
 
 function isUrlAbsolute(url) {

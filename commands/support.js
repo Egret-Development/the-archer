@@ -5,7 +5,7 @@ const actionBuilder = require("../classes/actionBuilder.js");
 module.exports = {
 	name: 'support',
 	description: 'Determine the ways to receive support for the bot!',
-	category: 'information',
+	category: 'botinfo',
 	production: true,
 	publish: true,
 	async execute(interaction, client) {

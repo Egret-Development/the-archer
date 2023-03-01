@@ -4,7 +4,7 @@ const { EmbedBuilder } = require("discord.js");
 module.exports = {
 	name: 'ping',
 	description: 'Ping!',
-	category: 'information',
+	category: 'botinfo',
 	production: true,
 	publish: true,
 	async execute(interaction, client) {

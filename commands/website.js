@@ -5,7 +5,7 @@ const actionBuilder = require("../classes/actionBuilder.js");
 module.exports = {
 	name: 'website',
 	description: 'Returns the website for the bot! This is where the dashboard is located!',
-	category: 'information',
+	category: 'botinfo',
 	production: true,
 	publish: true,
 	async execute(interaction, client) {
