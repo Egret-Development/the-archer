@@ -1,4 +1,4 @@
-// * Description: The website command
+// * Description: The uptime command
 const { EmbedBuilder } = require("discord.js");
 
 module.exports = {

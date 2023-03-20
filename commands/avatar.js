@@ -1,4 +1,4 @@
-// * Description: The ping command
+// * Description: The avatar command
 const { EmbedBuilder } = require("discord.js");
 
 module.exports = {

@@ -1,4 +1,4 @@
-// * Description: The ping command
+// * Description: The tweet command
 const { EmbedBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const actionBuilder = require("../classes/actionBuilder");
 const fetch = require("node-fetch");

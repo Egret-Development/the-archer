@@ -1,4 +1,4 @@
-// * Description: The ping command
+// * Description: The kick command
 const { EmbedBuilder, PermissionFlagsBits } = require("discord.js");
 const { errorEmbed } = require("../utils/helperFunctions");
 

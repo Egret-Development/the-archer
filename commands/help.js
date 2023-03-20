@@ -1,4 +1,4 @@
-// * Description: The ping command
+// * Description: The help command
 const { EmbedBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const actionBuilder = require("../classes/actionBuilder");
 
